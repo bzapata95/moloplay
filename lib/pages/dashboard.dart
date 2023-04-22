@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:molopay/blocs/authentication/authentication_bloc.dart';
 import 'package:molopay/blocs/business/business_bloc.dart';
 import 'package:molopay/models/person.dart';
+import 'package:molopay/models/transaction.dart';
 import 'package:molopay/routes/routes.dart';
 import 'package:molopay/views/bottom_sheet_create_person.dart';
 import 'package:molopay/widgets/avatar.dart';
@@ -41,26 +42,36 @@ class Dashboard extends StatelessWidget {
                     padding: const EdgeInsets.only(left: 20),
                     children: [
                       const _ButtonAdd(),
-                      ...businessBloc.state.persons.map((e) => Container(
-                            width: 90,
-                            margin: const EdgeInsets.only(right: 12),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Avatar(
-                                  size: 90,
-                                  radius: 30,
-                                  name: e.name,
-                                ),
-                                Text(
-                                  e.name,
-                                  textAlign: TextAlign.center,
-                                  style: const TextStyle(
-                                    overflow: TextOverflow.ellipsis,
+                      ...businessBloc.state.persons.map((e) => GestureDetector(
+                            onTap: () {
+                              businessBloc.add(
+                                  OnSelectedPersonForRegisterTransactionEvent(
+                                      person: e, type: TypeTransaction.give));
+                              Navigator.pushNamed(
+                                  context, Routes.registerTransaction);
+                            },
+                            child: Container(
+                              width: 90,
+                              margin: const EdgeInsets.only(right: 12),
+                              child: Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Avatar(
+                                    size: 90,
+                                    radius: 30,
+                                    name: e.name,
                                   ),
-                                )
-                              ],
+                                  Text(
+                                    e.name,
+                                    textAlign: TextAlign.center,
+                                    style: const TextStyle(
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  )
+                                ],
+                              ),
                             ),
                           ))
                     ],

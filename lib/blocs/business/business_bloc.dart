@@ -2,15 +2,27 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:molopay/helpers/sql_helpers.dart';
 import 'package:molopay/models/person.dart';
+import 'package:molopay/models/transaction.dart';
 
 part 'business_event.dart';
 part 'business_state.dart';
 
 class BusinessBloc extends Bloc<BusinessEvent, BusinessState> {
-  BusinessBloc() : super(const BusinessState(persons: [])) {
+  BusinessBloc()
+      : super(const BusinessState(
+          persons: [],
+          personSelected: null,
+        )) {
     on<OnAddPersonEvent>(_onAddPersons);
-    on<OnLoadPersonsOfDbEvent>(
-        ((event, emit) => emit(state.copyWith(persons: event.persons))));
+    on<OnLoadPersonsOfDbEvent>(((event, emit) => emit(state.copyWith(
+          persons: event.persons,
+        ))));
+    on<OnSelectedPersonForRegisterTransactionEvent>(
+        ((event, emit) => emit(state.copyWith(
+              personSelected: event.person,
+              typeTransaction: event.type,
+            ))));
+    on<OnCreateTransactionEvent>(_onCreateTransaction);
 
     _init();
   }
@@ -32,5 +44,20 @@ class BusinessBloc extends Bloc<BusinessEvent, BusinessState> {
     final personInsert = await SQLHelper.createPerson(name: event.name);
     final person = Person(id: personInsert, name: event.name);
     emit(state.copyWith(persons: [person, ...state.persons]));
+  }
+
+  _onCreateTransaction(
+      OnCreateTransactionEvent event, Emitter<BusinessState> emit) async {
+    final person = event.person;
+    final typeTransaction = event.type;
+    final amount = event.amount;
+
+    final idTransaction = await SQLHelper.createTransaction(
+      amount: amount,
+      personId: person.id,
+      type: typeTransaction,
+    );
+
+    print(idTransaction);
   }
 }

@@ -18,3 +18,25 @@ class OnLoadPersonsOfDbEvent extends BusinessEvent {
 
   const OnLoadPersonsOfDbEvent(this.persons);
 }
+
+class OnSelectedPersonForRegisterTransactionEvent extends BusinessEvent {
+  final Person person;
+  final TypeTransaction type;
+
+  const OnSelectedPersonForRegisterTransactionEvent({
+    required this.person,
+    required this.type,
+  });
+}
+
+class OnCreateTransactionEvent extends BusinessEvent {
+  final Person person;
+  final TypeTransaction type;
+  final double amount;
+
+  const OnCreateTransactionEvent({
+    required this.person,
+    required this.type,
+    required this.amount,
+  });
+}

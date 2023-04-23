@@ -3,6 +3,7 @@ import 'package:equatable/equatable.dart';
 import 'package:molopay/helpers/sql_helpers.dart';
 import 'package:molopay/models/person.dart';
 import 'package:molopay/models/transaction.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 part 'business_event.dart';
 part 'business_state.dart';
@@ -28,11 +29,24 @@ class BusinessBloc extends Bloc<BusinessEvent, BusinessState> {
     on<OnLoadTransactionsEvent>(((event, emit) => emit(state.copyWith(
           transactions: event.transactions,
         ))));
+    on<OnToggleVisibilityTotalBalanceEvent>(((event, emit) async {
+      final SharedPreferences pref = await SharedPreferences.getInstance();
+      final boolean = !state.isVisibilityTotalBalance;
+      pref.setBool("isVisibilityTotalBalance", boolean);
+      emit(state.copyWith(
+        isVisibilityTotalBalance: boolean,
+      ));
+    }));
+    on<OnInitialLoadSharedUserPreference>(((event, emit) => emit(state.copyWith(
+          isVisibilityTotalBalance: event.isVisibilityTotalBalance,
+        ))));
 
     _init();
   }
 
   Future<void> _init() async {
+    final SharedPreferences pref = await SharedPreferences.getInstance();
+    final isVisibilityTotalBalance = pref.getBool("isVisibilityTotalBalance");
     final persons = await SQLHelper.getPersons();
     await loadTransactions();
     await loadTotalBalance();
@@ -48,6 +62,8 @@ class BusinessBloc extends Bloc<BusinessEvent, BusinessState> {
         .toList();
 
     add(OnLoadPersonsOfDbEvent(formatted));
+    add(OnInitialLoadSharedUserPreference(
+        isVisibilityTotalBalance: isVisibilityTotalBalance ?? true));
   }
 
   Future<void> loadTransactions() async {

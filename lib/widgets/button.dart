@@ -29,6 +29,7 @@ class Button extends StatelessWidget {
         child: Text(
           label,
           style: TextStyle(
+              fontFamily: 'Montserrat',
               fontWeight: FontWeight.bold,
               color: colorButton == enumColorButton.black
                   ? Colors.white

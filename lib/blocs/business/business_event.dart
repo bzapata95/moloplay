@@ -52,3 +52,12 @@ class OnLoadTransactionsEvent extends BusinessEvent {
 
   const OnLoadTransactionsEvent(this.transactions);
 }
+
+class OnToggleVisibilityTotalBalanceEvent extends BusinessEvent {}
+
+class OnInitialLoadSharedUserPreference extends BusinessEvent {
+  final bool isVisibilityTotalBalance;
+
+  const OnInitialLoadSharedUserPreference(
+      {required this.isVisibilityTotalBalance});
+}

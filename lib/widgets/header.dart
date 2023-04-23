@@ -19,11 +19,16 @@ class Header extends StatelessWidget {
       children: [
         Text(
           title,
-          style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 20),
+          style: const TextStyle(
+              fontFamily: 'Montserrat',
+              fontWeight: FontWeight.w700,
+              fontSize: 20),
         ),
         if (titleButton != null)
           Text(titleButton!,
-              style: TextStyle(color: Colors.white.withOpacity(0.7)))
+              style: TextStyle(
+                  fontFamily: 'Montserrat',
+                  color: Colors.white.withOpacity(0.7)))
       ],
     );
   }

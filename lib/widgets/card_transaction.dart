@@ -36,14 +36,20 @@ class CardTransaction extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(transaction.name),
+                  Text(
+                    transaction.name,
+                    style: const TextStyle(
+                        fontFamily: 'Montserrat', fontWeight: FontWeight.w600),
+                  ),
                   const SizedBox(
                     height: 2,
                   ),
                   Text(
                     DateFormat.yMMMMEEEEd().format(transaction.createdAt),
                     style: TextStyle(
-                        color: Colors.white.withOpacity(0.5), fontSize: 12),
+                        fontFamily: 'Montserrat',
+                        color: Colors.white.withOpacity(0.5),
+                        fontSize: 12),
                   ),
                 ],
               )
@@ -52,6 +58,7 @@ class CardTransaction extends StatelessWidget {
           Text(
               '${transaction.type == 'GIVE' ? '+' : '-'} S/ ${transaction.amount.toStringAsFixed(2)}',
               style: TextStyle(
+                  fontFamily: 'Montserrat',
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                   color: transaction.type == 'GIVE'

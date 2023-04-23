@@ -31,7 +31,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  late final String initialRoute;
+  late final String? initialRoute;
 
   @override
   void initState() {
@@ -58,7 +58,9 @@ class _MyAppState extends State<MyApp> {
       title: 'Flutter Demo',
       theme: ThemeData.dark().copyWith(
           scaffoldBackgroundColor: const Color(0xff0F0F0F),
-          hintColor: const Color(0xffF8FBFA)),
+          hintColor: const Color(0xffF8FBFA),
+          floatingActionButtonTheme: const FloatingActionButtonThemeData(
+              backgroundColor: Color(0xff1B1B1B))),
       routes: appRoutes,
       initialRoute: initialRoute,
     );

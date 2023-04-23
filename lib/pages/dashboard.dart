@@ -16,6 +16,18 @@ class Dashboard extends StatelessWidget {
   Widget build(BuildContext context) {
     final businessBloc = BlocProvider.of<BusinessBloc>(context, listen: true);
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.white,
+        onPressed: () {
+          businessBloc.add(
+              const OnRegisterTransactionEvent(type: TypeTransaction.receive));
+          Navigator.pushNamed(context, Routes.registerTransaction);
+        },
+        child: const Icon(
+          Icons.move_to_inbox_rounded,
+          size: 28,
+        ),
+      ),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -86,6 +98,17 @@ class _HeaderDashboard extends StatelessWidget {
     required this.businessBloc,
   });
 
+  calculateSayHello() {
+    final nowHour = DateTime.now().hour;
+    if (nowHour > 0 && nowHour < 12) {
+      return 'Good morning';
+    }
+    if (nowHour >= 12 && nowHour < 18) {
+      return 'Good afternoon';
+    }
+    return 'Good evening';
+  }
+
   @override
   Widget build(BuildContext context) {
     const borderRadiusContainerHeader = Radius.circular(40);
@@ -120,8 +143,9 @@ class _HeaderDashboard extends StatelessWidget {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text("good morning",
+                              Text(calculateSayHello(),
                                   style: TextStyle(
+                                      fontFamily: 'Montserrat',
                                       color: Colors.white.withOpacity(0.6))),
                               const SizedBox(
                                 height: 2,
@@ -129,7 +153,11 @@ class _HeaderDashboard extends StatelessWidget {
                               BlocBuilder<AuthenticationBloc,
                                   AuthenticationState>(builder: (_, state) {
                                 if (state.username.isNotEmpty) {
-                                  return Text(state.username);
+                                  return Text(
+                                    state.username,
+                                    style: const TextStyle(
+                                        fontFamily: 'Montserrat'),
+                                  );
                                 }
                                 return Text("");
                               })
@@ -148,13 +176,25 @@ class _HeaderDashboard extends StatelessWidget {
                         children: [
                           Text(
                             'Your total balance',
-                            style:
-                                TextStyle(color: Colors.white.withOpacity(0.8)),
+                            style: TextStyle(
+                                fontFamily: 'Montserrat',
+                                fontSize: 16,
+                                color: Colors.white.withOpacity(0.8)),
                           ),
-                          Icon(
-                            Icons.visibility_off_outlined,
-                            color: Colors.white.withOpacity(0.8),
-                          )
+                          BlocBuilder<BusinessBloc, BusinessState>(
+                              builder: (_, state) {
+                            return IconButton(
+                                onPressed: () {
+                                  businessBloc.add(
+                                      OnToggleVisibilityTotalBalanceEvent());
+                                },
+                                icon: Icon(
+                                  state.isVisibilityTotalBalance
+                                      ? Icons.visibility_off_outlined
+                                      : Icons.visibility,
+                                  color: Colors.white.withOpacity(0.8),
+                                ));
+                          })
                         ],
                       ),
                       const SizedBox(
@@ -162,9 +202,12 @@ class _HeaderDashboard extends StatelessWidget {
                       ),
                       BlocBuilder<BusinessBloc, BusinessState>(
                           builder: (_, state) {
-                        return Text('S/ ${state.totalBalance}',
+                        return Text(
+                            'S/ ${state.isVisibilityTotalBalance ? state.totalBalance : '*********'}',
                             style: const TextStyle(
-                                fontSize: 40, fontWeight: FontWeight.bold));
+                                fontFamily: 'Montserrat',
+                                fontSize: 40,
+                                fontWeight: FontWeight.bold));
                       }),
                       const SizedBox(
                         height: 30,

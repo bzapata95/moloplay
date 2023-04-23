@@ -78,7 +78,9 @@ class _RegisterTransactionState extends State<RegisterTransaction> {
                                   children: [
                                     if (state.personSelected != null)
                                       Text(state.personSelected!.name,
-                                          style: TextStyle(fontSize: 20)),
+                                          style: const TextStyle(
+                                              fontFamily: 'Montserrat',
+                                              fontSize: 20)),
                                     const SizedBox(
                                       height: 5,
                                     ),
@@ -86,6 +88,7 @@ class _RegisterTransactionState extends State<RegisterTransaction> {
                                       Text(
                                         'Debe: S/ ${state.personSelected!.balance != null ? state.personSelected!.balance?.toStringAsFixed(2) : 0}',
                                         style: TextStyle(
+                                            fontFamily: 'Montserrat',
                                             color:
                                                 Colors.white.withOpacity(0.6)),
                                       )
@@ -133,6 +136,7 @@ class _RegisterTransactionState extends State<RegisterTransaction> {
                                 ? "Give"
                                 : "Receive",
                             style: const TextStyle(
+                              fontFamily: 'Montserrat',
                               fontWeight: FontWeight.bold,
                             ),
                           ));
@@ -150,6 +154,7 @@ class _RegisterTransactionState extends State<RegisterTransaction> {
                         const Text(
                           'S/',
                           style: TextStyle(
+                            fontFamily: 'Montserrat',
                             fontSize: 50,
                             fontWeight: FontWeight.bold,
                           ),
@@ -160,6 +165,7 @@ class _RegisterTransactionState extends State<RegisterTransaction> {
                         Text(
                           amount.isNotEmpty ? amount : "",
                           style: const TextStyle(
+                            fontFamily: 'Montserrat',
                             fontSize: 50,
                             fontWeight: FontWeight.bold,
                           ),
@@ -175,9 +181,10 @@ class _RegisterTransactionState extends State<RegisterTransaction> {
                 handleChangeAmount(text);
               },
               textStyle: const TextStyle(
-                color: Colors.white,
-                fontSize: 30,
-              ),
+                  fontFamily: 'Montserrat',
+                  color: Colors.white,
+                  fontSize: 30,
+                  fontWeight: FontWeight.w600),
               rightButtonFn: () {
                 handleDeleteOneDigit();
               },
@@ -212,6 +219,7 @@ class _RegisterTransactionState extends State<RegisterTransaction> {
               height: 80,
               text: 'swipe to register',
               textStyle: TextStyle(
+                fontFamily: 'Montserrat',
                 color: Colors.white.withOpacity(0.7),
                 fontSize: 16,
               ),

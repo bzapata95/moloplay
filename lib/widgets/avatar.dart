@@ -23,7 +23,10 @@ class Avatar extends StatelessWidget {
       child: Center(
           child: Text(
         name != null ? name!.substring(0, 1) : "U",
-        style: TextStyle(fontSize: size / 2.5, fontWeight: FontWeight.bold),
+        style: TextStyle(
+            fontFamily: 'Montserrat',
+            fontSize: size / 2.5,
+            fontWeight: FontWeight.bold),
       )),
     );
   }

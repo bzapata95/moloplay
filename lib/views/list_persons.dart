@@ -52,6 +52,7 @@ class ListPersons extends StatelessWidget {
                             e.name,
                             textAlign: TextAlign.center,
                             style: const TextStyle(
+                              fontFamily: 'Montserrat',
                               overflow: TextOverflow.ellipsis,
                             ),
                           )

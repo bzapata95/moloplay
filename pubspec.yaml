@@ -36,11 +36,11 @@ dependencies:
   flutter_native_splash: ^2.2.19
   bloc: ^8.1.1
   equatable: ^2.0.5
-  google_maps_flutter: ^2.2.2
   flutter_bloc: ^8.1.2
   shared_preferences: ^2.1.0
   uuid: ^3.0.7
   sqflite: ^2.2.7
+  intl: ^0.18.1
 
 dev_dependencies:
   flutter_test:

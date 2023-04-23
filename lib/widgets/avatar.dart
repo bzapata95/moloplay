@@ -19,7 +19,7 @@ class Avatar extends StatelessWidget {
       height: size,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(radius)),
-          color: Colors.primaries[1]),
+          color: Colors.primaries[name!.length <= 17 ? name!.length : 17]),
       child: Center(
           child: Text(
         name != null ? name!.substring(0, 1) : "U",

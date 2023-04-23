@@ -1,17 +1,16 @@
-import 'package:molopay/models/person.dart';
-
 enum TypeTransaction { give, receive }
 
 class Transaction {
-  final String id;
+  final int id;
   final double amount;
-  final TypeTransaction type;
-  final Person person;
+  final String type;
+  final String name;
+  final DateTime createdAt;
 
-  Transaction({
-    required this.id,
-    required this.amount,
-    required this.type,
-    required this.person,
-  });
+  Transaction(
+      {required this.id,
+      required this.amount,
+      required this.type,
+      required this.name,
+      required this.createdAt});
 }

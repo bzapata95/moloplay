@@ -39,16 +39,33 @@ class CardTransaction extends StatelessWidget {
                   Text(
                     transaction.name,
                     style: const TextStyle(
-                        fontFamily: 'Montserrat', fontWeight: FontWeight.w600),
+                        fontFamily: 'Montserrat', fontWeight: FontWeight.w700),
                   ),
                   const SizedBox(
                     height: 2,
+                  ),
+                  SizedBox(
+                    width: 220,
+                    child: Text(
+                      transaction.description,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                      softWrap: false,
+                      style: TextStyle(
+                        fontFamily: 'Montserrat',
+                        color: Colors.white.withOpacity(0.7),
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 4,
                   ),
                   Text(
                     DateFormat.yMMMMEEEEd().format(transaction.createdAt),
                     style: TextStyle(
                         fontFamily: 'Montserrat',
-                        color: Colors.white.withOpacity(0.5),
+                        color: Colors.white.withOpacity(0.4),
                         fontSize: 12),
                   ),
                 ],

@@ -23,6 +23,7 @@ class RegisterScreen extends StatelessWidget {
         body: Column(
       children: [
         SafeArea(
+          bottom: false,
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
             child: Column(
@@ -30,14 +31,19 @@ class RegisterScreen extends StatelessWidget {
               children: [
                 const Text(
                   "Register your name.",
-                  style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                      fontFamily: 'Montserrat',
+                      fontSize: 40,
+                      fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(
                   height: 10,
                 ),
                 Text(
                   "Only register in your device.",
-                  style: TextStyle(color: Colors.white.withOpacity(0.5)),
+                  style: TextStyle(
+                      fontFamily: 'Montserrat',
+                      color: Colors.white.withOpacity(0.5)),
                 ),
               ],
             ),
@@ -45,6 +51,7 @@ class RegisterScreen extends StatelessWidget {
         ),
         Expanded(
           child: Container(
+            margin: const EdgeInsets.only(top: 20),
             decoration: const BoxDecoration(
               color: Color(0xff1B1B1B),
               borderRadius: BorderRadius.only(
@@ -62,9 +69,15 @@ class RegisterScreen extends StatelessWidget {
                     enableSuggestions: false,
                     autocorrect: false,
                     decoration: InputDecoration(
-                        hintText: 'Enter your username or name',
-                        hintStyle:
-                            TextStyle(color: Colors.white.withOpacity(0.3))),
+                      hintText: 'Enter your username or name',
+                      hintStyle: TextStyle(
+                          fontFamily: 'Montserrat',
+                          color: Colors.white.withOpacity(0.3)),
+                    ),
+                    textInputAction: TextInputAction.send,
+                    onSubmitted: (value) {
+                      handleSignUp(context, value);
+                    },
                   ),
                   const SizedBox(
                     height: 50,

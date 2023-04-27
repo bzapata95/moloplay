@@ -126,6 +126,7 @@ class _HeaderDashboard extends StatelessWidget {
         SizedBox(
           height: 400,
           child: SafeArea(
+            bottom: false,
             child: Padding(
               padding: const EdgeInsets.only(left: 12, right: 12, top: 10),
               child: Column(
@@ -212,32 +213,37 @@ class _HeaderDashboard extends StatelessWidget {
                       const SizedBox(
                         height: 30,
                       ),
-                      Row(
-                        children: [
-                          Button(
-                            onPressed: () {
-                              businessBloc.add(const OnRegisterTransactionEvent(
-                                  person: null, type: TypeTransaction.receive));
-                              Navigator.pushNamed(
-                                  context, Routes.registerTransaction);
-                            },
-                            label: 'Receive',
-                            colorButton: enumColorButton.white,
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          Button(
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 20),
+                        child: Row(
+                          children: [
+                            Button(
                               onPressed: () {
                                 businessBloc.add(
                                     const OnRegisterTransactionEvent(
                                         person: null,
-                                        type: TypeTransaction.give));
+                                        type: TypeTransaction.receive));
                                 Navigator.pushNamed(
                                     context, Routes.registerTransaction);
                               },
-                              label: 'Give'),
-                        ],
+                              label: 'Receive',
+                              colorButton: enumColorButton.white,
+                            ),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            Button(
+                                onPressed: () {
+                                  businessBloc.add(
+                                      const OnRegisterTransactionEvent(
+                                          person: null,
+                                          type: TypeTransaction.give));
+                                  Navigator.pushNamed(
+                                      context, Routes.registerTransaction);
+                                },
+                                label: 'Give'),
+                          ],
+                        ),
                       )
                     ],
                   )

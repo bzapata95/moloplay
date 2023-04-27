@@ -54,16 +54,25 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
-      theme: ThemeData.dark().copyWith(
-          scaffoldBackgroundColor: const Color(0xff0F0F0F),
-          hintColor: const Color(0xffF8FBFA),
-          floatingActionButtonTheme: const FloatingActionButtonThemeData(
-              backgroundColor: Color(0xff1B1B1B))),
-      routes: appRoutes,
-      initialRoute: initialRoute,
+    return GestureDetector(
+      onTap: () {
+        final focus = FocusScope.of(context);
+        final focusChild = focus.focusedChild;
+        if (focusChild != null && !focusChild.hasPrimaryFocus) {
+          focusChild.unfocus();
+        }
+      },
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Flutter Demo',
+        theme: ThemeData.dark().copyWith(
+            scaffoldBackgroundColor: const Color(0xff0F0F0F),
+            hintColor: const Color(0xffF8FBFA),
+            floatingActionButtonTheme: const FloatingActionButtonThemeData(
+                backgroundColor: Color(0xff1B1B1B))),
+        routes: appRoutes,
+        initialRoute: initialRoute,
+      ),
     );
   }
 }

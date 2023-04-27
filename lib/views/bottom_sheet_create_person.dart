@@ -16,9 +16,8 @@ class BottomSheetCreatePerson extends StatelessWidget {
   Widget build(BuildContext context) {
     final namePersonController = TextEditingController();
     return Container(
-      height: 300,
       decoration: const BoxDecoration(
-          color: Color(0xff0F0F0F),
+          color: Color.fromARGB(255, 27, 27, 27),
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(40),
             topRight: Radius.circular(40),
@@ -32,8 +31,13 @@ class BottomSheetCreatePerson extends StatelessWidget {
             enableSuggestions: false,
             autocorrect: false,
             decoration: InputDecoration(
-                hintText: 'Enter person name',
-                hintStyle: TextStyle(color: Colors.white.withOpacity(0.3))),
+              hintText: 'Enter person name',
+              hintStyle: TextStyle(color: Colors.white.withOpacity(0.3)),
+            ),
+            textInputAction: TextInputAction.send,
+            onSubmitted: (value) {
+              handleSendPerson(context, value);
+            },
           ),
           const SizedBox(
             height: 40,

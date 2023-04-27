@@ -75,6 +75,7 @@ class BusinessBloc extends Bloc<BusinessEvent, BusinessState> {
               id: e['id'],
               name: e['name'],
               type: e['type'] != null ? e['type'].toString() : "",
+              description: e['description'],
             ))
         .toList();
     add(OnLoadTransactionsEvent(formattedTransactions));
@@ -97,12 +98,13 @@ class BusinessBloc extends Bloc<BusinessEvent, BusinessState> {
     final person = event.person;
     final typeTransaction = event.type;
     final amount = event.amount;
+    final description = event.description;
 
     await SQLHelper.createTransaction(
-      amount: amount,
-      person: person,
-      type: typeTransaction,
-    );
+        amount: amount,
+        person: person,
+        type: typeTransaction,
+        description: description);
 
     final newMap = state.persons.map((e) {
       if (e.id == event.person.id) {

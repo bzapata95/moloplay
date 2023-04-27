@@ -20,6 +20,7 @@ class SQLHelper {
         id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
         type TEXT NOT NULL,
         amount DECIMAL(20,10) NOT NULL,
+        description TEXT NOT NULL,
         createAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
         personId INTEGER NOT NULL,
         FOREIGN KEY (personId) REFERENCES persons (id) ON DELETE CASCADE ON UPDATE CASCADE
@@ -75,6 +76,7 @@ class SQLHelper {
     required Person person,
     required TypeTransaction type,
     required double amount,
+    required String description,
   }) async {
     final db = await SQLHelper.db();
 
@@ -82,6 +84,7 @@ class SQLHelper {
       'personId': person.id,
       'type': type == TypeTransaction.give ? 'GIVE' : 'RECEIVE',
       'amount': amount,
+      'description': description,
     };
     final id = await db.insert(
       'transactions',

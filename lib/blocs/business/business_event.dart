@@ -33,11 +33,13 @@ class OnCreateTransactionEvent extends BusinessEvent {
   final Person person;
   final TypeTransaction type;
   final double amount;
+  final String description;
 
   const OnCreateTransactionEvent({
     required this.person,
     required this.type,
     required this.amount,
+    required this.description,
   });
 }
 

@@ -18,6 +18,7 @@ class RegisterTransaction extends StatefulWidget {
 
 class _RegisterTransactionState extends State<RegisterTransaction> {
   String amount = "";
+  String description = "";
 
   handleChangeAmount(String text) {
     amount = amount + text;
@@ -40,8 +41,9 @@ class _RegisterTransactionState extends State<RegisterTransaction> {
 
   @override
   Widget build(BuildContext context) {
-    final businessBloc = BlocProvider.of<BusinessBloc>(context);
+    final businessBloc = BlocProvider.of<BusinessBloc>(context, listen: true);
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -113,7 +115,7 @@ class _RegisterTransactionState extends State<RegisterTransaction> {
                         ));
             }),
             const SizedBox(
-              height: 40,
+              height: 20,
             ),
             Expanded(
               child: Column(
@@ -144,7 +146,7 @@ class _RegisterTransactionState extends State<RegisterTransaction> {
                     return Container();
                   }),
                   const SizedBox(
-                    height: 20,
+                    height: 10,
                   ),
                   FittedBox(
                     fit: BoxFit.scaleDown,
@@ -173,6 +175,19 @@ class _RegisterTransactionState extends State<RegisterTransaction> {
                       ],
                     ),
                   ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  TextField(
+                    onChanged: (value) {
+                      description = value;
+                      setState(() {});
+                    },
+                    decoration: InputDecoration(
+                        hintText: 'Into an escription',
+                        hintStyle:
+                            TextStyle(color: Colors.white.withOpacity(0.5))),
+                  )
                 ],
               ),
             ),
@@ -212,39 +227,48 @@ class _RegisterTransactionState extends State<RegisterTransaction> {
               height: 40,
             ),
             SafeArea(
-                child: SlideAction(
-              innerColor: const Color(0xff348276),
-              outerColor: const Color(0xff1b1b1b),
-              borderRadius: 20,
-              height: 80,
-              text: 'swipe to register',
-              textStyle: TextStyle(
-                fontFamily: 'Montserrat',
-                color: Colors.white.withOpacity(0.7),
-                fontSize: 16,
-              ),
-              elevation: 0,
-              sliderButtonIcon: const Icon(
-                Icons.keyboard_arrow_right_sharp,
-                color: Colors.white,
-                size: 32,
-              ),
-              sliderRotate: false,
-              onSubmit: () async {
-                final state = businessBloc.state;
-                if (state.personSelected != null &&
-                    state.typeTransaction != null &&
-                    amount.isNotEmpty) {
-                  businessBloc.add(OnCreateTransactionEvent(
-                    person: state.personSelected!,
-                    type: state.typeTransaction!,
-                    amount: double.parse(amount),
-                  ));
+              top: false,
+              maintainBottomViewPadding: true,
+              child: SlideAction(
+                innerColor: const Color(0xff348276),
+                outerColor: const Color(0xff1b1b1b),
+                borderRadius: 20,
+                height: 80,
+                text: 'swipe to register',
+                textStyle: TextStyle(
+                  fontFamily: 'Montserrat',
+                  color: Colors.white.withOpacity(0.7),
+                  fontSize: 16,
+                ),
+                elevation: 0,
+                sliderButtonIcon: const Icon(
+                  Icons.keyboard_arrow_right_sharp,
+                  color: Colors.white,
+                  size: 32,
+                ),
+                sliderRotate: false,
+                onSubmit: (amount.isEmpty ||
+                        description.isEmpty ||
+                        businessBloc.state.personSelected == null)
+                    ? null
+                    : () async {
+                        final state = businessBloc.state;
+                        if (state.personSelected != null &&
+                            state.typeTransaction != null &&
+                            amount.isNotEmpty) {
+                          businessBloc.add(OnCreateTransactionEvent(
+                            person: state.personSelected!,
+                            type: state.typeTransaction!,
+                            amount: double.parse(amount),
+                            description: description,
+                          ));
 
-                  Navigator.pushReplacementNamed(context, Routes.dashboard);
-                }
-              },
-            ))
+                          Navigator.pushReplacementNamed(
+                              context, Routes.dashboard);
+                        }
+                      },
+              ),
+            )
           ],
         ),
       ),

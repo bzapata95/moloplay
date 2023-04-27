@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 enum enumColorButton { white, black }
 
 class Button extends StatelessWidget {
-  final Function() onPressed;
+  final Function()? onPressed;
   final String label;
   final enumColorButton colorButton;
 
   const Button({
     super.key,
-    required this.onPressed,
+    this.onPressed,
     required this.label,
     this.colorButton = enumColorButton.black,
   });
@@ -20,12 +20,13 @@ class Button extends StatelessWidget {
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
-            shape: const StadiumBorder(),
-            elevation: 0,
-            backgroundColor: colorButton == enumColorButton.black
-                ? Colors.black
-                : Colors.white,
-            padding: const EdgeInsets.symmetric(vertical: 20)),
+          shape: const StadiumBorder(),
+          elevation: 0,
+          backgroundColor: colorButton == enumColorButton.black
+              ? Colors.black
+              : Colors.white,
+          padding: const EdgeInsets.symmetric(vertical: 20),
+        ),
         child: Text(
           label,
           style: TextStyle(

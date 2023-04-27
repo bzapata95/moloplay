@@ -42,6 +42,8 @@ class _RegisterTransactionState extends State<RegisterTransaction> {
   @override
   Widget build(BuildContext context) {
     final businessBloc = BlocProvider.of<BusinessBloc>(context, listen: true);
+    final personSelected = businessBloc.state.personSelected;
+    final typeTransaction = businessBloc.state.typeTransaction;
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -153,24 +155,38 @@ class _RegisterTransactionState extends State<RegisterTransaction> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Text(
+                        Text(
                           'S/',
                           style: TextStyle(
-                            fontFamily: 'Montserrat',
-                            fontSize: 50,
-                            fontWeight: FontWeight.bold,
-                          ),
+                              fontFamily: 'Montserrat',
+                              fontSize: 50,
+                              fontWeight: FontWeight.bold,
+                              color: personSelected != null && amount.isNotEmpty
+                                  ? double.parse(amount) >
+                                              personSelected.balance! &&
+                                          typeTransaction ==
+                                              TypeTransaction.receive
+                                      ? Colors.redAccent.shade400
+                                      : Colors.white
+                                  : Colors.white),
                         ),
                         const SizedBox(
                           width: 5,
                         ),
                         Text(
                           amount.isNotEmpty ? amount : "",
-                          style: const TextStyle(
-                            fontFamily: 'Montserrat',
-                            fontSize: 50,
-                            fontWeight: FontWeight.bold,
-                          ),
+                          style: TextStyle(
+                              fontFamily: 'Montserrat',
+                              fontSize: 50,
+                              fontWeight: FontWeight.bold,
+                              color: personSelected != null && amount.isNotEmpty
+                                  ? double.parse(amount) >
+                                              personSelected.balance! &&
+                                          typeTransaction ==
+                                              TypeTransaction.receive
+                                      ? Colors.redAccent.shade400
+                                      : Colors.white
+                                  : Colors.white),
                         )
                       ],
                     ),
@@ -249,7 +265,10 @@ class _RegisterTransactionState extends State<RegisterTransaction> {
                 sliderRotate: false,
                 onSubmit: (amount.isEmpty ||
                         description.isEmpty ||
-                        businessBloc.state.personSelected == null)
+                        businessBloc.state.personSelected == null ||
+                        (personSelected != null &&
+                            typeTransaction == TypeTransaction.receive &&
+                            double.parse(amount) > personSelected.balance!))
                     ? null
                     : () async {
                         final state = businessBloc.state;
@@ -263,8 +282,7 @@ class _RegisterTransactionState extends State<RegisterTransaction> {
                             description: description,
                           ));
 
-                          Navigator.pushReplacementNamed(
-                              context, Routes.dashboard);
+                          Navigator.pop(context, Routes.dashboard);
                         }
                       },
               ),

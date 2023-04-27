@@ -119,7 +119,7 @@ class SQLHelper {
   static Future<List<Map<String, dynamic>>> getTransactions() async {
     final db = await SQLHelper.db();
     final result = await db.rawQuery(
-        'SELECT *  FROM transactions  INNER JOIN persons ON transactions.personId = persons.id ORDER BY createAt DESC LIMIT 5');
+        'SELECT *  FROM transactions  INNER JOIN persons ON transactions.personId = persons.id ORDER BY createAt DESC LIMIT 15');
     return result;
   }
 }

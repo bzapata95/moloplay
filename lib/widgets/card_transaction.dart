@@ -22,73 +22,78 @@ class CardTransaction extends StatelessWidget {
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15),
-        child:
-            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          Row(
-            children: [
-              Avatar(
-                name: transaction.name,
-              ),
-              const SizedBox(
-                width: 10,
-              ),
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    transaction.name,
-                    style: const TextStyle(
-                        fontFamily: 'Montserrat', fontWeight: FontWeight.w700),
-                  ),
-                  const SizedBox(
-                    height: 2,
-                  ),
-                  SizedBox(
-                    width: 180,
-                    child: Text(
-                      transaction.description,
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 2,
-                      softWrap: false,
-                      style: TextStyle(
-                        fontSize: 13,
-                        fontFamily: 'Montserrat',
-                        color: Colors.white.withOpacity(0.7),
-                        fontWeight: FontWeight.w400,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              children: [
+                Avatar(
+                  name: transaction.name,
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      transaction.name,
+                      style: const TextStyle(
+                          fontFamily: 'Montserrat',
+                          fontWeight: FontWeight.w700),
+                    ),
+                    const SizedBox(
+                      height: 2,
+                    ),
+                    SizedBox(
+                      width: 180,
+                      child: Text(
+                        transaction.description,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 2,
+                        softWrap: false,
+                        style: TextStyle(
+                          fontSize: 13,
+                          fontFamily: 'Montserrat',
+                          color: Colors.white.withOpacity(0.7),
+                          fontWeight: FontWeight.w400,
+                        ),
                       ),
                     ),
-                  ),
-                  const SizedBox(
-                    height: 4,
-                  ),
-                  Text(
-                    DateFormat.yMMMMEEEEd().format(transaction.createdAt),
+                    const SizedBox(
+                      height: 4,
+                    ),
+                    Text(
+                      DateFormat.yMMMMEEEEd().format(transaction.createdAt),
+                      style: TextStyle(
+                          fontFamily: 'Montserrat',
+                          color: Colors.white.withOpacity(0.4),
+                          fontSize: 12),
+                    ),
+                  ],
+                )
+              ],
+            ),
+            SizedBox(
+              width: 120,
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                alignment: Alignment.centerRight,
+                child: Text(
+                    '${transaction.type == 'GIVE' ? '+' : '-'} S/ ${transaction.amount.toStringAsFixed(2)}',
+                    textAlign: TextAlign.right,
                     style: TextStyle(
                         fontFamily: 'Montserrat',
-                        color: Colors.white.withOpacity(0.4),
-                        fontSize: 12),
-                  ),
-                ],
-              )
-            ],
-          ),
-          SizedBox(
-            width: 120,
-            child: FittedBox(
-              fit: BoxFit.scaleDown,
-              child: Text(
-                  '${transaction.type == 'GIVE' ? '+' : '-'} S/ ${transaction.amount.toStringAsFixed(2)}',
-                  style: TextStyle(
-                      fontFamily: 'Montserrat',
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: transaction.type == 'GIVE'
-                          ? Colors.greenAccent.shade400
-                          : Colors.redAccent.shade400)),
-            ),
-          )
-        ]),
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: transaction.type == 'GIVE'
+                            ? Colors.greenAccent.shade400
+                            : Colors.redAccent.shade400)),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

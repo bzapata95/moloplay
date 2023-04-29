@@ -111,11 +111,12 @@ class _HeaderDashboard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const double heightHeader = 360;
     const borderRadiusContainerHeader = Radius.circular(40);
     return Stack(
       children: [
         Container(
-          height: 400,
+          height: heightHeader,
           decoration: const BoxDecoration(
               gradient: LinearGradient(
                   colors: [Color(0xff338075), Color(0xff1A5450)]),
@@ -124,7 +125,7 @@ class _HeaderDashboard extends StatelessWidget {
                   bottomRight: borderRadiusContainerHeader)),
         ),
         SizedBox(
-          height: 400,
+          height: heightHeader,
           child: SafeArea(
             bottom: false,
             child: Padding(

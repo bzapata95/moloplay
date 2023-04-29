@@ -76,7 +76,7 @@ class CardTransaction extends StatelessWidget {
               ],
             ),
             SizedBox(
-              width: 120,
+              width: 110,
               child: FittedBox(
                 fit: BoxFit.scaleDown,
                 alignment: Alignment.centerRight,

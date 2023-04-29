@@ -217,31 +217,35 @@ class _HeaderDashboard extends StatelessWidget {
                         padding: const EdgeInsets.only(bottom: 20),
                         child: Row(
                           children: [
-                            Button(
-                              onPressed: () {
-                                businessBloc.add(
-                                    const OnRegisterTransactionEvent(
-                                        person: null,
-                                        type: TypeTransaction.receive));
-                                Navigator.pushNamed(
-                                    context, Routes.registerTransaction);
-                              },
-                              label: 'Receive',
-                              colorButton: enumColorButton.white,
-                            ),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            Button(
+                            Expanded(
+                              child: Button(
                                 onPressed: () {
                                   businessBloc.add(
                                       const OnRegisterTransactionEvent(
                                           person: null,
-                                          type: TypeTransaction.give));
+                                          type: TypeTransaction.receive));
                                   Navigator.pushNamed(
                                       context, Routes.registerTransaction);
                                 },
-                                label: 'Give'),
+                                label: 'Receive',
+                                colorButton: enumColorButton.white,
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            Expanded(
+                              child: Button(
+                                  onPressed: () {
+                                    businessBloc.add(
+                                        const OnRegisterTransactionEvent(
+                                            person: null,
+                                            type: TypeTransaction.give));
+                                    Navigator.pushNamed(
+                                        context, Routes.registerTransaction);
+                                  },
+                                  label: 'Give'),
+                            )
                           ],
                         ),
                       )

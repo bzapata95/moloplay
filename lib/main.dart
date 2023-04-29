@@ -31,7 +31,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  late final String? initialRoute;
+  late final String initialRoute;
 
   @override
   void initState() {
@@ -39,7 +39,7 @@ class _MyAppState extends State<MyApp> {
     initialization();
   }
 
-  void initialization() async {
+  Future<void> initialization() async {
     final authenticationBloc = BlocProvider.of<AuthenticationBloc>(context);
     final isAuth = await authenticationBloc.verifyAuthenticationUser();
 

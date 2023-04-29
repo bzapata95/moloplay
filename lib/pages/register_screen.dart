@@ -62,6 +62,7 @@ class RegisterScreen extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.all(20),
               child: Column(
+                mainAxisSize: MainAxisSize.max,
                 children: [
                   TextField(
                     controller: userNameController,
@@ -82,16 +83,18 @@ class RegisterScreen extends StatelessWidget {
                   const SizedBox(
                     height: 50,
                   ),
-                  SizedBox(
-                    width: double.infinity,
-                    height: 56,
-                    child: Button(
-                      onPressed: () {
-                        handleSignUp(context, userNameController.text);
-                      },
-                      label: 'Sign Up',
-                      colorButton: enumColorButton.white,
-                    ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Button(
+                          onPressed: () {
+                            handleSignUp(context, userNameController.text);
+                          },
+                          label: 'Sign Up',
+                          colorButton: enumColorButton.white,
+                        ),
+                      ),
+                    ],
                   )
                 ],
               ),

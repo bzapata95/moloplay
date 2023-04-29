@@ -16,26 +16,23 @@ class Button extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: ElevatedButton(
-        onPressed: onPressed,
-        style: ElevatedButton.styleFrom(
-          shape: const StadiumBorder(),
-          elevation: 0,
-          backgroundColor: colorButton == enumColorButton.black
-              ? Colors.black
-              : Colors.white,
-          padding: const EdgeInsets.symmetric(vertical: 20),
-        ),
-        child: Text(
-          label,
-          style: TextStyle(
-              fontFamily: 'Montserrat',
-              fontWeight: FontWeight.bold,
-              color: colorButton == enumColorButton.black
-                  ? Colors.white
-                  : Colors.black),
-        ),
+    return ElevatedButton(
+      onPressed: onPressed,
+      style: ElevatedButton.styleFrom(
+        shape: const StadiumBorder(),
+        elevation: 0,
+        backgroundColor:
+            colorButton == enumColorButton.black ? Colors.black : Colors.white,
+        padding: const EdgeInsets.symmetric(vertical: 20),
+      ),
+      child: Text(
+        label,
+        style: TextStyle(
+            fontFamily: 'Montserrat',
+            fontWeight: FontWeight.bold,
+            color: colorButton == enumColorButton.black
+                ? Colors.white
+                : Colors.black),
       ),
     );
   }

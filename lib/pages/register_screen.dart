@@ -8,6 +8,9 @@ class RegisterScreen extends StatelessWidget {
   const RegisterScreen({super.key});
 
   void handleSignUp(BuildContext context, String username) {
+    if (username.trim().isEmpty) {
+      return;
+    }
     final authBloc = BlocProvider.of<AuthenticationBloc>(context);
 
     authBloc.add(RegisterUserEvent(username));

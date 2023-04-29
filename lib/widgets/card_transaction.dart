@@ -15,7 +15,7 @@ class CardTransaction extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      height: 80,
+      height: 90,
       decoration: const BoxDecoration(
         color: Color(0xff1B1B1B),
         borderRadius: BorderRadius.all(Radius.circular(15)),
@@ -45,13 +45,14 @@ class CardTransaction extends StatelessWidget {
                     height: 2,
                   ),
                   SizedBox(
-                    width: 220,
+                    width: 180,
                     child: Text(
                       transaction.description,
                       overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
+                      maxLines: 2,
                       softWrap: false,
                       style: TextStyle(
+                        fontSize: 13,
                         fontFamily: 'Montserrat',
                         color: Colors.white.withOpacity(0.7),
                         fontWeight: FontWeight.w400,
@@ -72,15 +73,21 @@ class CardTransaction extends StatelessWidget {
               )
             ],
           ),
-          Text(
-              '${transaction.type == 'GIVE' ? '+' : '-'} S/ ${transaction.amount.toStringAsFixed(2)}',
-              style: TextStyle(
-                  fontFamily: 'Montserrat',
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: transaction.type == 'GIVE'
-                      ? Colors.greenAccent.shade400
-                      : Colors.redAccent.shade400))
+          SizedBox(
+            width: 120,
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                  '${transaction.type == 'GIVE' ? '+' : '-'} S/ ${transaction.amount.toStringAsFixed(2)}',
+                  style: TextStyle(
+                      fontFamily: 'Montserrat',
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: transaction.type == 'GIVE'
+                          ? Colors.greenAccent.shade400
+                          : Colors.redAccent.shade400)),
+            ),
+          )
         ]),
       ),
     );

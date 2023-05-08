@@ -29,7 +29,7 @@ class SQLHelper {
   }
 
   static Future<sql.Database> db() async {
-    return sql.openDatabase('moloplay.db', version: 2,
+    return sql.openDatabase('moloplay.db', version: 3,
         onCreate: (sql.Database database, int versions) async {
       await createTables(database);
     });
@@ -85,6 +85,7 @@ class SQLHelper {
       'type': type == TypeTransaction.give ? 'GIVE' : 'RECEIVE',
       'amount': amount,
       'description': description,
+      'createAt': DateTime.now().microsecondsSinceEpoch,
     };
     final id = await db.insert(
       'transactions',
@@ -116,10 +117,11 @@ class SQLHelper {
         : 0.toStringAsFixed(2);
   }
 
-  static Future<List<Map<String, dynamic>>> getTransactions() async {
+  static Future<List<Map<String, dynamic>>> getTransactions(
+      {int limit = 15}) async {
     final db = await SQLHelper.db();
     final result = await db.rawQuery(
-        'SELECT *  FROM transactions  INNER JOIN persons ON transactions.personId = persons.id ORDER BY createAt DESC LIMIT 15');
+        'SELECT *  FROM transactions  INNER JOIN persons ON transactions.personId = persons.id ORDER BY createAt DESC LIMIT $limit');
     return result;
   }
 }

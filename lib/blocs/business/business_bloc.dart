@@ -1,9 +1,12 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:intl/intl.dart';
 import 'package:molopay/helpers/sql_helpers.dart';
 import 'package:molopay/models/person.dart';
 import 'package:molopay/models/transaction.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../utils/formatted_currency.dart';
 
 part 'business_event.dart';
 part 'business_state.dart';
@@ -67,7 +70,7 @@ class BusinessBloc extends Bloc<BusinessEvent, BusinessState> {
   }
 
   Future<void> loadTransactions() async {
-    final transactions = await SQLHelper.getTransactions();
+    final transactions = await SQLHelper.getTransactions(limit: 8);
     final formattedTransactions = transactions
         .map((e) => Transaction(
               amount: double.parse(e['amount'].toString()),
@@ -83,7 +86,8 @@ class BusinessBloc extends Bloc<BusinessEvent, BusinessState> {
 
   Future<void> loadTotalBalance() async {
     final totalBalance = await SQLHelper.sumTotalBalance();
-    add(OnLoadTotalBalanceEvent(totalBalance));
+    String formattedAmount = formattedCurrency(double.parse(totalBalance));
+    add(OnLoadTotalBalanceEvent(formattedAmount));
   }
 
   _onAddPersons(OnAddPersonEvent event, Emitter<BusinessState> emit) async {

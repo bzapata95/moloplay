@@ -111,10 +111,7 @@ class _RegisterTransactionState extends State<RegisterTransaction> {
                                 icon: const Icon(Icons.close))
                           ],
                         )
-                      : ListPersons(
-                          redirect: false,
-                          type: state.typeTransaction ?? TypeTransaction.give,
-                        ));
+                      : const ListPersons());
             }),
             const SizedBox(
               height: 20,

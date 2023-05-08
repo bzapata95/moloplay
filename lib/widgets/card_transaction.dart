@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:molopay/models/transaction.dart';
+import 'package:molopay/utils/formatted_currency.dart';
 import 'package:molopay/widgets/avatar.dart';
 
 class CardTransaction extends StatelessWidget {
@@ -81,7 +82,7 @@ class CardTransaction extends StatelessWidget {
                 fit: BoxFit.scaleDown,
                 alignment: Alignment.centerRight,
                 child: Text(
-                    '${transaction.type == 'GIVE' ? '+' : '-'} S/ ${transaction.amount.toStringAsFixed(2)}',
+                    '${transaction.type == 'GIVE' ? '+' : '-'} ${formattedCurrency(transaction.amount)}',
                     textAlign: TextAlign.right,
                     style: TextStyle(
                         fontFamily: 'Montserrat',

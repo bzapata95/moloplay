@@ -39,14 +39,14 @@ class Dashboard extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 20)
                         .copyWith(top: 40, bottom: 10),
                     child: const Header(
-                      title: 'quick give',
+                      title: 'Recent',
                       titleButton: 'view all',
                     ),
                   ),
                   const SizedBox(
                     height: 20,
                   ),
-                  const ListPersons(type: TypeTransaction.give)
+                  const ListPersons()
                 ],
               ),
               const SizedBox(
@@ -205,7 +205,9 @@ class _HeaderDashboard extends StatelessWidget {
                       BlocBuilder<BusinessBloc, BusinessState>(
                           builder: (_, state) {
                         return Text(
-                            'S/ ${state.isVisibilityTotalBalance ? state.totalBalance : '*********'}',
+                            state.isVisibilityTotalBalance
+                                ? state.totalBalance
+                                : '*********',
                             style: const TextStyle(
                                 fontFamily: 'Montserrat',
                                 fontSize: 40,

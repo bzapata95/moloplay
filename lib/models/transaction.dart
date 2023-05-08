@@ -7,6 +7,7 @@ class Transaction {
   final String type;
   final String name;
   final DateTime createdAt;
+  final String dateTransaction;
 
   Transaction({
     required this.id,
@@ -15,5 +16,6 @@ class Transaction {
     required this.name,
     required this.createdAt,
     required this.description,
+    required this.dateTransaction,
   });
 }

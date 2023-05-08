@@ -111,7 +111,9 @@ class _RegisterTransactionState extends State<RegisterTransaction> {
                                 icon: const Icon(Icons.close))
                           ],
                         )
-                      : const ListPersons());
+                      : const ListPersons(
+                          hasOpenModal: false,
+                        ));
             }),
             const SizedBox(
               height: 20,

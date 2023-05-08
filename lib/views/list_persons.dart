@@ -9,11 +9,11 @@ import 'package:molopay/views/bottom_sheet_create_person.dart';
 import 'package:molopay/widgets/avatar.dart';
 
 class ListPersons extends StatelessWidget {
-  // final bool redirect;
+  final bool hasOpenModal;
   // final TypeTransaction type;
   const ListPersons({
     super.key,
-    // required this.type,
+    this.hasOpenModal = true,
     // this.redirect = true,
   });
 
@@ -41,8 +41,13 @@ class ListPersons extends StatelessWidget {
             children: [
               ...state.persons.map((e) => GestureDetector(
                     onTap: () {
-                      // businessBloc.add(
-                      //     OnRegisterTransactionEvent(person: e, type: type));
+                      if (hasOpenModal == false &&
+                          businessBloc.state.typeTransaction != null) {
+                        businessBloc.add(OnRegisterTransactionEvent(
+                            person: e,
+                            type: businessBloc.state.typeTransaction!));
+                        return;
+                      }
                       // // if (redirect) {
                       // Navigator.pushNamed(context, Routes.registerTransaction);
                       // // }

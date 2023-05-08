@@ -66,7 +66,8 @@ class CardTransaction extends StatelessWidget {
                       height: 4,
                     ),
                     Text(
-                      DateFormat.yMMMMEEEEd().format(transaction.createdAt),
+                      DateFormat.yMMMMEEEEd()
+                          .format(DateTime.parse(transaction.dateTransaction)),
                       style: TextStyle(
                           fontFamily: 'Montserrat',
                           color: Colors.white.withOpacity(0.4),

@@ -61,14 +61,24 @@ class Dashboard extends StatelessWidget {
                       builder: (_, state) {
                     return Column(
                       children: [
-                        const Header(
-                          title: 'history',
+                        Header(
+                          title: 'History',
                           titleButton: 'view all',
+                          onRedirect: () {
+                            Navigator.pushNamed(context, Routes.allTransaction);
+                          },
                         ),
                         const SizedBox(
                           height: 20,
                         ),
-                        ...state.transactions.map((e) => Column(
+                        ...state.transactions.map(
+                          (e) => GestureDetector(
+                            onTap: () {
+                              Navigator.pushNamed(
+                                  context, Routes.detailsTransaction,
+                                  arguments: e);
+                            },
+                            child: Column(
                               children: [
                                 CardTransaction(
                                   transaction: e,
@@ -77,7 +87,9 @@ class Dashboard extends StatelessWidget {
                                   height: 12,
                                 )
                               ],
-                            ))
+                            ),
+                          ),
+                        )
                       ],
                     );
                   }),

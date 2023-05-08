@@ -22,6 +22,7 @@ class SQLHelper {
         amount DECIMAL(20,10) NOT NULL,
         description TEXT NOT NULL,
         createAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        dateTransaction TEXT NOT NULL,
         personId INTEGER NOT NULL,
         FOREIGN KEY (personId) REFERENCES persons (id) ON DELETE CASCADE ON UPDATE CASCADE
       )
@@ -85,7 +86,7 @@ class SQLHelper {
       'type': type == TypeTransaction.give ? 'GIVE' : 'RECEIVE',
       'amount': amount,
       'description': description,
-      'createAt': DateTime.now().microsecondsSinceEpoch,
+      'dateTransaction': DateTime.now().toString(),
     };
     final id = await db.insert(
       'transactions',

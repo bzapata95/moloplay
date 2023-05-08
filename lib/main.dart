@@ -10,6 +10,7 @@ import 'package:molopay/routes/routes.dart';
 void main() {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+
   runApp(MultiBlocProvider(
     providers: [
       BlocProvider(
@@ -66,10 +67,12 @@ class _MyAppState extends State<MyApp> {
         debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
         theme: ThemeData.dark().copyWith(
-            scaffoldBackgroundColor: const Color(0xff0F0F0F),
-            hintColor: const Color(0xffF8FBFA),
-            floatingActionButtonTheme: const FloatingActionButtonThemeData(
-                backgroundColor: Color(0xff1B1B1B))),
+          scaffoldBackgroundColor: const Color(0xff0F0F0F),
+          hintColor: const Color(0xffF8FBFA),
+          floatingActionButtonTheme: const FloatingActionButtonThemeData(
+              backgroundColor: Color(0xff1B1B1B)),
+          dividerColor: Colors.grey.withOpacity(0.5),
+        ),
         routes: appRoutes,
         initialRoute: initialRoute,
       ),

@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 class Header extends StatelessWidget {
   final String title;
   final String? titleButton;
-  final Function()? onPressTitleButton;
+  final Function()? onRedirect;
 
   const Header({
     super.key,
     required this.title,
     this.titleButton,
-    this.onPressTitleButton,
+    this.onRedirect,
   });
 
   @override
@@ -25,10 +25,13 @@ class Header extends StatelessWidget {
               fontSize: 20),
         ),
         if (titleButton != null)
-          Text(titleButton!,
-              style: TextStyle(
-                  fontFamily: 'Montserrat',
-                  color: Colors.white.withOpacity(0.7)))
+          GestureDetector(
+            onTap: onRedirect,
+            child: Text(titleButton!,
+                style: TextStyle(
+                    fontFamily: 'Montserrat',
+                    color: Colors.white.withOpacity(0.7))),
+          )
       ],
     );
   }

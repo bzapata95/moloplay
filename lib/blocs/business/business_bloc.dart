@@ -7,6 +7,7 @@ import 'package:molopay/models/transaction.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../utils/formatted_currency.dart';
+import '../../utils/formatted_transaction.dart';
 
 part 'business_event.dart';
 part 'business_state.dart';
@@ -71,16 +72,7 @@ class BusinessBloc extends Bloc<BusinessEvent, BusinessState> {
 
   Future<void> loadTransactions() async {
     final transactions = await SQLHelper.getTransactions(limit: 8);
-    final formattedTransactions = transactions
-        .map((e) => Transaction(
-              amount: double.parse(e['amount'].toString()),
-              createdAt: DateTime.parse(e['createAt']),
-              id: e['id'],
-              name: e['name'],
-              type: e['type'] != null ? e['type'].toString() : "",
-              description: e['description'],
-            ))
-        .toList();
+    final formattedTransactions = formattedTransaction(transactions);
     add(OnLoadTransactionsEvent(formattedTransactions));
   }
 

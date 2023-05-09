@@ -125,4 +125,12 @@ class SQLHelper {
         'SELECT *  FROM transactions  INNER JOIN persons ON transactions.personId = persons.id ORDER BY createAt DESC LIMIT $limit');
     return result;
   }
+
+  static Future<List<Map<String, dynamic>>> getTransactionsByPersonId(
+      {int limit = 15, required int id}) async {
+    final db = await SQLHelper.db();
+    final result = await db.rawQuery(
+        'SELECT *  FROM transactions  INNER JOIN persons p ON transactions.personId = p.id WHERE p.id = $id ORDER BY createAt DESC LIMIT $limit ');
+    return result;
+  }
 }

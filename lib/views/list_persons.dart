@@ -56,25 +56,27 @@ class ListPersons extends StatelessWidget {
                         builder: (BuildContext context) => CupertinoActionSheet(
                           title: Text('Operation'),
                           actions: <Widget>[
-                            // CupertinoActionSheetAction(
-                            //   child: Row(
-                            //     mainAxisAlignment: MainAxisAlignment.center,
-                            //     children: const [
-                            //       Text('Profile'),
-                            //       SizedBox(
-                            //         width: 5,
-                            //       ),
-                            //       Icon(
-                            //         Icons.person,
-                            //         color: Colors.blueAccent,
-                            //       )
-                            //     ],
-                            //   ),
-                            //   onPressed: () {
-                            //     Navigator.pop(context);
-                            //     // Acción a realizar al seleccionar la opción 2
-                            //   },
-                            // ),
+                            CupertinoActionSheetAction(
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: const [
+                                  Text('Profile'),
+                                  SizedBox(
+                                    width: 5,
+                                  ),
+                                  Icon(
+                                    Icons.person,
+                                    color: Colors.blueAccent,
+                                  )
+                                ],
+                              ),
+                              onPressed: () {
+                                Navigator.pop(context);
+                                Navigator.pushNamed(context, Routes.profile,
+                                    arguments: e);
+                                // Acción a realizar al seleccionar la opción 2
+                              },
+                            ),
                             CupertinoActionSheetAction(
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,

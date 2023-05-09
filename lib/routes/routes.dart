@@ -6,4 +6,5 @@ class Routes {
   static const authenticationScreen = '/authentication';
   static const detailsTransaction = '/details-transaction';
   static const allTransaction = '/all-transaction';
+  static const profile = '/profile';
 }

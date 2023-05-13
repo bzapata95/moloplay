@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:intl/intl.dart';
+import 'package:local_auth/local_auth.dart';
 import 'package:molopay/helpers/sql_helpers.dart';
 import 'package:molopay/models/person.dart';
 import 'package:molopay/models/transaction.dart';
@@ -13,6 +14,10 @@ part 'business_event.dart';
 part 'business_state.dart';
 
 class BusinessBloc extends Bloc<BusinessEvent, BusinessState> {
+  final LocalAuthentication auth = LocalAuthentication();
+
+  LocalAuthentication get authBiometrics => auth;
+
   BusinessBloc()
       : super(const BusinessState(
           persons: [],
@@ -44,11 +49,17 @@ class BusinessBloc extends Bloc<BusinessEvent, BusinessState> {
     on<OnInitialLoadSharedUserPreference>(((event, emit) => emit(state.copyWith(
           isVisibilityTotalBalance: event.isVisibilityTotalBalance,
         ))));
+    on<OnValidateIsSupportedAuthBiometricsEvent>(
+        ((event, emit) => emit(state.copyWith(
+              isSupportedAuthBiometrics: event.isSupported,
+            ))));
 
     _init();
   }
 
   Future<void> _init() async {
+    auth.isDeviceSupported().then((bool isSupported) =>
+        add(OnValidateIsSupportedAuthBiometricsEvent(isSupported)));
     final SharedPreferences pref = await SharedPreferences.getInstance();
     final isVisibilityTotalBalance = pref.getBool("isVisibilityTotalBalance");
     final persons = await SQLHelper.getPersons();

@@ -7,6 +7,7 @@ class BusinessState extends Equatable {
   final String totalBalance;
   final List<Transaction> transactions;
   final bool isVisibilityTotalBalance;
+  final bool isSupportedAuthBiometrics;
 
   const BusinessState({
     required this.persons,
@@ -14,7 +15,8 @@ class BusinessState extends Equatable {
     this.personSelected,
     this.typeTransaction,
     this.totalBalance = "0.00",
-    this.isVisibilityTotalBalance = true,
+    this.isVisibilityTotalBalance = false,
+    this.isSupportedAuthBiometrics = false,
   });
 
   BusinessState copyWith({
@@ -24,6 +26,7 @@ class BusinessState extends Equatable {
     String? totalBalance,
     List<Transaction>? transactions,
     bool? isVisibilityTotalBalance,
+    bool? isSupportedAuthBiometrics,
   }) =>
       BusinessState(
         persons: persons ?? this.persons,
@@ -33,6 +36,8 @@ class BusinessState extends Equatable {
         transactions: transactions ?? this.transactions,
         isVisibilityTotalBalance:
             isVisibilityTotalBalance ?? this.isVisibilityTotalBalance,
+        isSupportedAuthBiometrics:
+            isSupportedAuthBiometrics ?? this.isSupportedAuthBiometrics,
       );
 
   @override
@@ -43,5 +48,6 @@ class BusinessState extends Equatable {
         totalBalance,
         transactions,
         isVisibilityTotalBalance,
+        isSupportedAuthBiometrics,
       ];
 }

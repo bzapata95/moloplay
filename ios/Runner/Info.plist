@@ -51,5 +51,7 @@
 	<false/>
 	<key>io.flutter.embedded_views_preview</key>
 	<true/>
+	<key>NSFaceIDUsageDescription</key>
+	<string>Active Biometric authentication, for view your balance and do transaction and more.</string>
 </dict>
 </plist>

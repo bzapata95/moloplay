@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:molopay/helpers/sql_helpers.dart';
 import 'package:molopay/models/person.dart';
 import 'package:molopay/models/transaction.dart';
+import 'package:molopay/routes/routes.dart';
 import 'package:molopay/utils/formatted_currency.dart';
 import 'package:molopay/utils/formatted_transaction.dart';
 import 'package:molopay/widgets/avatar.dart';
@@ -19,6 +20,9 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   List<Transaction> transactions = [];
+  bool isActiveEditName = false;
+  final _nameProfileController = TextEditingController();
+  final FocusNode _focusNodeNameProvider = FocusNode();
 
   onLoadTransactions() async {
     final response = await SQLHelper.getTransactionsByPersonId(
@@ -31,7 +35,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     onLoadTransactions();
+    _nameProfileController.text = widget.person.name;
+
     super.initState();
+  }
+
+  onHandleEditNamePerson() async {
+    if (_nameProfileController.text.trim().isEmpty) {
+      return;
+    }
+
+    try {
+      await SQLHelper.updateNamePerson(
+          name: _nameProfileController.text, idPerson: widget.person.id);
+      isActiveEditName = false;
+      setState(() {});
+    } catch (e) {
+      print(e);
+    }
   }
 
   @override
@@ -62,18 +83,61 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         const SizedBox(
                           width: 10,
                         ),
-                        Text(
-                          widget.person.name,
-                          style: const TextStyle(
-                            fontFamily: "Montserrat",
-                            fontSize: 17,
-                            fontWeight: FontWeight.bold,
+                        if (!isActiveEditName)
+                          Text(
+                            _nameProfileController.text,
+                            style: const TextStyle(
+                              fontFamily: "Montserrat",
+                              fontSize: 17,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        )
+                        if (isActiveEditName)
+                          SizedBox(
+                              height: 56,
+                              width: 200,
+                              child: TextField(
+                                focusNode: _focusNodeNameProvider,
+                                controller: _nameProfileController,
+                                decoration: const InputDecoration(
+                                  hintText: "Into name",
+                                ),
+                              )),
                       ],
                     ),
-                    Spacer(),
-                    IconButton(onPressed: () {}, icon: const Icon(Icons.edit))
+                    const Spacer(),
+                    if (!isActiveEditName)
+                      IconButton(
+                          onPressed: () {
+                            _focusNodeNameProvider.requestFocus();
+                            _nameProfileController.selection = TextSelection(
+                              baseOffset: 0,
+                              extentOffset: _nameProfileController.text.length,
+                            );
+                            setState(() {
+                              isActiveEditName = !isActiveEditName;
+                            });
+                          },
+                          icon: const Icon(Icons.edit)),
+                    if (isActiveEditName)
+                      Row(
+                        children: [
+                          IconButton(
+                              onPressed: () {
+                                onHandleEditNamePerson();
+                              },
+                              icon: const Icon(Icons.save)),
+                          IconButton(
+                              onPressed: () {
+                                _nameProfileController.text =
+                                    widget.person.name;
+                                setState(() {
+                                  isActiveEditName = !isActiveEditName;
+                                });
+                              },
+                              icon: const Icon(Icons.close)),
+                        ],
+                      ),
                   ],
                 ),
                 const SizedBox(
@@ -117,16 +181,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   height: 20,
                 ),
                 ListView.builder(
-                  physics: NeverScrollableScrollPhysics(),
+                  physics: const NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
                   itemBuilder: (_, index) {
-                    return Column(
-                      children: [
-                        CardTransaction(transaction: transactions[index]),
-                        const SizedBox(
-                          height: 15,
-                        )
-                      ],
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.pushNamed(context, Routes.detailsTransaction,
+                            arguments: transactions[index]);
+                      },
+                      child: Column(
+                        children: [
+                          CardTransaction(transaction: transactions[index]),
+                          const SizedBox(
+                            height: 15,
+                          )
+                        ],
+                      ),
                     );
                   },
                   itemCount: transactions.length,

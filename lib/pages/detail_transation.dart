@@ -26,19 +26,34 @@ class DetailTransaction extends StatelessWidget {
               Text(
                 formattedCurrency(transaction.amount),
                 style: const TextStyle(
-                  fontSize: 30,
+                  fontSize: 35,
                   fontWeight: FontWeight.bold,
                   fontFamily: "Montserrat",
                 ),
               ),
               const SizedBox(
-                height: 5,
+                height: 10,
               ),
               Text(
                 transaction.name,
                 style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
+                  fontFamily: "Montserrat",
+                ),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              const Divider(),
+              const SizedBox(
+                height: 20,
+              ),
+              Text(
+                transaction.description,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w400,
                   fontFamily: "Montserrat",
                 ),
               ),

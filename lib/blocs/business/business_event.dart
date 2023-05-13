@@ -63,3 +63,8 @@ class OnInitialLoadSharedUserPreference extends BusinessEvent {
   const OnInitialLoadSharedUserPreference(
       {required this.isVisibilityTotalBalance});
 }
+
+class OnValidateIsSupportedAuthBiometricsEvent extends BusinessEvent {
+  final bool isSupported;
+  const OnValidateIsSupportedAuthBiometricsEvent(this.isSupported);
+}

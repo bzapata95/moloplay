@@ -107,6 +107,19 @@ class SQLHelper {
     return id;
   }
 
+  static Future<int> updateNamePerson(
+      {required String name, required int idPerson}) async {
+    final db = await SQLHelper.db();
+    final update = await db.update(
+        'persons',
+        {
+          'name': name,
+        },
+        where: "id = ?",
+        whereArgs: [idPerson]);
+    return update;
+  }
+
   static Future<String> sumTotalBalance() async {
     final db = await SQLHelper.db();
 

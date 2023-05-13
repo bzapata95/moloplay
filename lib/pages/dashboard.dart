@@ -8,14 +8,21 @@ import 'package:molopay/views/list_persons.dart';
 import 'package:molopay/widgets/button.dart';
 import 'package:molopay/widgets/card_transaction.dart';
 import 'package:molopay/widgets/header.dart';
+import 'package:local_auth/local_auth.dart';
 
 class Dashboard extends StatelessWidget {
   const Dashboard({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final keyScaffold = GlobalKey<ScaffoldState>();
     final businessBloc = BlocProvider.of<BusinessBloc>(context, listen: true);
+
     return Scaffold(
+      key: keyScaffold,
+      drawer: const Drawer(
+        child: SafeArea(child: Text("In Construction")),
+      ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.white,
         onPressed: () {
@@ -31,7 +38,8 @@ class Dashboard extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            _HeaderDashboard(businessBloc: businessBloc),
+            _HeaderDashboard(
+                businessBloc: businessBloc, keyScaffold: keyScaffold),
             Column(children: [
               Column(
                 children: [
@@ -105,9 +113,12 @@ class Dashboard extends StatelessWidget {
 
 class _HeaderDashboard extends StatelessWidget {
   final BusinessBloc businessBloc;
+  final GlobalKey<ScaffoldState> keyScaffold;
+
   const _HeaderDashboard({
     super.key,
     required this.businessBloc,
+    required this.keyScaffold,
   });
 
   calculateSayHello() {
@@ -119,6 +130,37 @@ class _HeaderDashboard extends StatelessWidget {
       return 'Good afternoon';
     }
     return 'Good evening';
+  }
+
+  onHandleShowTotalBalance() async {
+    final canCheckBiometrics =
+        await businessBloc.authBiometrics.canCheckBiometrics;
+    if (businessBloc.state.isVisibilityTotalBalance) {
+      businessBloc.add(OnToggleVisibilityTotalBalanceEvent());
+
+      return;
+    }
+
+    if (businessBloc.state.isSupportedAuthBiometrics && canCheckBiometrics) {
+      try {
+        final authenticated = await businessBloc.authBiometrics.authenticate(
+          localizedReason:
+              'Scan your fingerprint (or face or whatever) to authenticate',
+          options: const AuthenticationOptions(
+              // stickyAuth: true,
+              // biometricOnly: true,
+              ),
+        );
+        if (authenticated) {
+          businessBloc.add(OnToggleVisibilityTotalBalanceEvent());
+        }
+      } catch (e) {
+        // canCheckBiometrics = false;
+        print(e);
+      }
+    } else {
+      businessBloc.add(OnToggleVisibilityTotalBalanceEvent());
+    }
   }
 
   @override
@@ -150,7 +192,11 @@ class _HeaderDashboard extends StatelessWidget {
                     children: [
                       Row(
                         children: [
-                          const Icon(Icons.menu),
+                          IconButton(
+                              onPressed: () {
+                                keyScaffold.currentState!.openDrawer();
+                              },
+                              icon: const Icon(Icons.menu)),
                           const SizedBox(
                             width: 10,
                           ),
@@ -199,8 +245,8 @@ class _HeaderDashboard extends StatelessWidget {
                               builder: (_, state) {
                             return IconButton(
                                 onPressed: () {
-                                  businessBloc.add(
-                                      OnToggleVisibilityTotalBalanceEvent());
+                                  // Validate Biometric authentication
+                                  onHandleShowTotalBalance();
                                 },
                                 icon: Icon(
                                   state.isVisibilityTotalBalance

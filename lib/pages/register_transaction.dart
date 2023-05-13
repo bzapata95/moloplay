@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:local_auth/local_auth.dart' show AuthenticationOptions;
 import 'package:molopay/blocs/business/business_bloc.dart';
 import 'package:molopay/models/transaction.dart';
 import 'package:molopay/views/list_persons.dart';
@@ -17,8 +18,15 @@ class RegisterTransaction extends StatefulWidget {
 }
 
 class _RegisterTransactionState extends State<RegisterTransaction> {
+  final FocusNode _focusNode = FocusNode();
   String amount = "";
   String description = "";
+
+  @override
+  void initState() {
+    _focusNode.requestFocus();
+    super.initState();
+  }
 
   handleChangeAmount(String text) {
     amount = amount + text;
@@ -36,6 +44,46 @@ class _RegisterTransactionState extends State<RegisterTransaction> {
     if (amount.isNotEmpty && amount.contains(".") == false) {
       amount = "$amount.";
       setState(() {});
+    }
+  }
+
+  onProcessRegisterTransaction(BusinessBloc businessBloc) {
+    final state = businessBloc.state;
+    if (state.personSelected != null &&
+        state.typeTransaction != null &&
+        amount.isNotEmpty) {
+      businessBloc.add(OnCreateTransactionEvent(
+        person: state.personSelected!,
+        type: state.typeTransaction!,
+        amount: double.parse(amount),
+        description: description,
+      ));
+    }
+
+    Navigator.pop(context, Routes.dashboard);
+  }
+
+  onHandleRegisterTransaction(BusinessBloc businessBloc) async {
+    if (businessBloc.state.isSupportedAuthBiometrics) {
+      try {
+        final authenticated = await businessBloc.authBiometrics.authenticate(
+          localizedReason:
+              'Scan your fingerprint (or face or whatever) to authenticate',
+          options: const AuthenticationOptions(
+              // stickyAuth: true,
+              // biometricOnly: true,
+              ),
+        );
+        if (authenticated) {
+          onProcessRegisterTransaction(businessBloc);
+        } else {
+          return;
+        }
+      } catch (e) {
+        print(e);
+      }
+    } else {
+      onProcessRegisterTransaction(businessBloc);
     }
   }
 
@@ -194,12 +242,13 @@ class _RegisterTransactionState extends State<RegisterTransaction> {
                     height: 10,
                   ),
                   TextField(
+                    focusNode: _focusNode,
                     onChanged: (value) {
                       description = value;
                       setState(() {});
                     },
                     decoration: InputDecoration(
-                        hintText: 'Into an escription',
+                        hintText: 'Into a description',
                         hintStyle:
                             TextStyle(color: Colors.white.withOpacity(0.5))),
                   )
@@ -270,19 +319,7 @@ class _RegisterTransactionState extends State<RegisterTransaction> {
                             double.parse(amount) > personSelected.balance!))
                     ? null
                     : () async {
-                        final state = businessBloc.state;
-                        if (state.personSelected != null &&
-                            state.typeTransaction != null &&
-                            amount.isNotEmpty) {
-                          businessBloc.add(OnCreateTransactionEvent(
-                            person: state.personSelected!,
-                            type: state.typeTransaction!,
-                            amount: double.parse(amount),
-                            description: description,
-                          ));
-
-                          Navigator.pop(context, Routes.dashboard);
-                        }
+                        onHandleRegisterTransaction(businessBloc);
                       },
               ),
             )

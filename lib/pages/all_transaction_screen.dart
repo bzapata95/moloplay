@@ -31,28 +31,24 @@ class _AllTransactionScreenState extends State<AllTransactionScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text("All Transaction")),
-      body: Container(
-        padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 10),
-        child: ListView.builder(
-            itemBuilder: (_, index) {
-              final transaction = transactions[index];
-              return Column(
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.pushNamed(context, Routes.detailsTransaction,
-                          arguments: transaction);
-                    },
-                    child: CardTransaction(transaction: transaction),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  )
-                ],
-              );
-            },
-            itemCount: transactions.length),
-      ),
+      body: ListView.builder(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+          itemBuilder: (_, index) {
+            final transaction = transactions[index];
+            return Column(
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pushNamed(context, Routes.detailsTransaction,
+                        arguments: transaction);
+                  },
+                  child: CardTransaction(transaction: transaction),
+                ),
+                const Divider()
+              ],
+            );
+          },
+          itemCount: transactions.length),
     );
   }
 }

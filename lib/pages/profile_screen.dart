@@ -1,11 +1,15 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:molopay/helpers/sql_helpers.dart';
+import 'package:molopay/helpers/storage_helpers.dart';
 import 'package:molopay/models/person.dart';
 import 'package:molopay/models/transaction.dart';
 import 'package:molopay/routes/routes.dart';
 import 'package:molopay/utils/formatted_currency.dart';
 import 'package:molopay/utils/formatted_transaction.dart';
+import 'package:molopay/utils/handle_request_permission.dart';
+import 'package:molopay/utils/responsive.dart';
 import 'package:molopay/widgets/avatar.dart';
 import 'package:molopay/widgets/card_transaction.dart';
 import 'package:molopay/widgets/header.dart';
@@ -21,8 +25,10 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   List<Transaction> transactions = [];
   bool isActiveEditName = false;
+  String? _urlPath;
   final _nameProfileController = TextEditingController();
   final FocusNode _focusNodeNameProvider = FocusNode();
+  final _storageHelper = StorageHelper();
 
   onLoadTransactions() async {
     final response = await SQLHelper.getTransactionsByPersonId(
@@ -36,6 +42,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void initState() {
     onLoadTransactions();
     _nameProfileController.text = widget.person.name;
+    _urlPath = widget.person.urlImage;
 
     super.initState();
   }
@@ -55,8 +62,29 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
+  onHandleUploadPhoto(bool gallery) async {
+    final String? response;
+
+    if (gallery) {
+      response = await HandleRequestPermissions.requestOpenPhotoLibrary();
+    } else {
+      response = await HandleRequestPermissions.requestOpenCamera();
+    }
+
+    if (response != null) {
+      final urlSecure = await _storageHelper.uploadImage(response);
+      if (urlSecure != null) {
+        _urlPath = urlSecure;
+        await SQLHelper.updateUrlImagePerson(
+            urlImage: urlSecure, idPerson: widget.person.id);
+        setState(() {});
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final responsive = Responsive.of(context);
     return Scaffold(
       appBar: AppBar(
         systemOverlayStyle: SystemUiOverlayStyle.light,
@@ -75,10 +103,61 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Avatar(
-                          name: widget.person.name,
-                          radius: 150,
-                          size: 80,
+                        Container(
+                          width: responsive.dp(8.5),
+                          height: responsive.dp(8.5),
+                          child: Stack(
+                            children: [
+                              Avatar(
+                                name: widget.person.name,
+                                radius: 150,
+                                size: 80,
+                                urlImage: _urlPath,
+                              ),
+                              Positioned(
+                                bottom: 0,
+                                right: 0,
+                                child: Container(
+                                  width: responsive.dp(4),
+                                  height: responsive.dp(4),
+                                  decoration: const BoxDecoration(
+                                      color: Color.fromARGB(255, 58, 70, 62),
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(50))),
+                                  child: Center(
+                                    child: IconButton(
+                                      onPressed: () {
+                                        showCupertinoModalPopup(
+                                            context: context,
+                                            builder: (_) {
+                                              return CupertinoActionSheet(
+                                                title: Text('Operation'),
+                                                actions: [
+                                                  CupertinoActionSheetAction(
+                                                    child: Text("Take a photo"),
+                                                    onPressed: () async {
+                                                      onHandleUploadPhoto(
+                                                          false);
+                                                    },
+                                                  ),
+                                                  CupertinoActionSheetAction(
+                                                    child: Text("Gallery"),
+                                                    onPressed: () async {
+                                                      onHandleUploadPhoto(true);
+                                                    },
+                                                  )
+                                                ],
+                                              );
+                                            });
+                                      },
+                                      icon:
+                                          const Icon(Icons.camera_alt_outlined),
+                                    ),
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
                         ),
                         const SizedBox(
                           width: 10,
@@ -191,10 +270,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       },
                       child: Column(
                         children: [
-                          CardTransaction(transaction: transactions[index]),
-                          const SizedBox(
-                            height: 15,
-                          )
+                          CardTransaction(
+                            transaction: transactions[index],
+                            withAvatar: false,
+                            withName: false,
+                          ),
+                          const Divider()
                         ],
                       ),
                     );

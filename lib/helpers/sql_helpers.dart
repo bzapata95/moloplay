@@ -120,6 +120,19 @@ class SQLHelper {
     return update;
   }
 
+  static Future<int> updateUrlImagePerson(
+      {required String urlImage, required int idPerson}) async {
+    final db = await SQLHelper.db();
+    final update = await db.update(
+        'persons',
+        {
+          'urlImage': urlImage,
+        },
+        where: "id = ?",
+        whereArgs: [idPerson]);
+    return update;
+  }
+
   static Future<String> sumTotalBalance() async {
     final db = await SQLHelper.db();
 

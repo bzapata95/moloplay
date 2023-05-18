@@ -80,23 +80,25 @@ class Dashboard extends StatelessWidget {
                           height: 20,
                         ),
                         ...state.transactions.map(
-                          (e) => GestureDetector(
-                            onTap: () {
-                              Navigator.pushNamed(
-                                  context, Routes.detailsTransaction,
-                                  arguments: e);
-                            },
-                            child: Column(
-                              children: [
-                                CardTransaction(
-                                  transaction: e,
-                                ),
-                                const SizedBox(
-                                  height: 12,
-                                )
-                              ],
-                            ),
-                          ),
+                          (e) {
+                            return GestureDetector(
+                              onTap: () {
+                                Navigator.pushNamed(
+                                    context, Routes.detailsTransaction,
+                                    arguments: e);
+                              },
+                              child: Column(
+                                children: [
+                                  CardTransaction(
+                                    transaction: e,
+                                  ),
+                                  const Divider(
+                                    height: 12,
+                                  )
+                                ],
+                              ),
+                            );
+                          },
                         )
                       ],
                     );
@@ -235,7 +237,7 @@ class _HeaderDashboard extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            'Your total balance',
+                            'Balance',
                             style: TextStyle(
                                 fontFamily: 'Montserrat',
                                 fontSize: 16,

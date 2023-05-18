@@ -53,5 +53,10 @@
 	<true/>
 	<key>NSFaceIDUsageDescription</key>
 	<string>Active Biometric authentication, for view your balance and do transaction and more.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Active access to library for change photo of profile and more.</string>
+	<!-- Permission options for the `camera` group -->
+	<key>NSCameraUsageDescription</key>
+	<string>Active access to camera for change photo of profile and more.</string>
 </dict>
 </plist>

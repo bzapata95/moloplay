@@ -120,7 +120,9 @@ class _RegisterTransactionState extends State<RegisterTransaction> {
                               children: [
                                 Avatar(
                                   size: 60,
+                                  radius: 400,
                                   name: state.personSelected!.name,
+                                  urlImage: state.personSelected!.urlImage,
                                 ),
                                 const SizedBox(
                                   width: 10,

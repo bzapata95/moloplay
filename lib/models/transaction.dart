@@ -8,14 +8,15 @@ class Transaction {
   final String name;
   final DateTime createdAt;
   final String dateTransaction;
+  final String? urlImage;
 
-  Transaction({
-    required this.id,
-    required this.amount,
-    required this.type,
-    required this.name,
-    required this.createdAt,
-    required this.description,
-    required this.dateTransaction,
-  });
+  Transaction(
+      {required this.id,
+      required this.amount,
+      required this.type,
+      required this.name,
+      required this.createdAt,
+      required this.description,
+      required this.dateTransaction,
+      this.urlImage});
 }

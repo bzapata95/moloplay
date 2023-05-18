@@ -8,6 +8,7 @@ List<Transaction> formattedTransaction(
             createdAt: DateTime.parse(e['createAt']),
             id: e['id'],
             name: e['name'],
+            urlImage: e['urlImage'],
             type: e['type'] != null ? e['type'].toString() : "",
             description: e['description'],
             dateTransaction: e['dateTransaction'],

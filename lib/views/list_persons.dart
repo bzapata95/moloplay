@@ -5,6 +5,7 @@ import 'package:molopay/blocs/business/business_bloc.dart';
 import 'package:molopay/models/person.dart';
 import 'package:molopay/models/transaction.dart';
 import 'package:molopay/routes/routes.dart';
+import 'package:molopay/utils/responsive.dart';
 import 'package:molopay/views/bottom_sheet_create_person.dart';
 import 'package:molopay/widgets/avatar.dart';
 
@@ -30,6 +31,7 @@ class ListPersons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final responsive = Responsive.of(context);
     final businessBloc = BlocProvider.of<BusinessBloc>(context, listen: true);
     return SizedBox(
       height: 115,
@@ -39,6 +41,7 @@ class ListPersons extends StatelessWidget {
             scrollDirection: Axis.horizontal,
             padding: const EdgeInsets.only(left: 20),
             children: [
+              const _ButtonAdd(),
               ...state.persons.map((e) => GestureDetector(
                     onTap: () {
                       if (hasOpenModal == false &&
@@ -48,9 +51,7 @@ class ListPersons extends StatelessWidget {
                             type: businessBloc.state.typeTransaction!));
                         return;
                       }
-                      // // if (redirect) {
-                      // Navigator.pushNamed(context, Routes.registerTransaction);
-                      // // }
+
                       showCupertinoModalPopup(
                         context: context,
                         builder: (BuildContext context) => CupertinoActionSheet(
@@ -134,19 +135,20 @@ class ListPersons extends StatelessWidget {
                       );
                     },
                     child: Container(
-                      width: 90,
-                      margin: const EdgeInsets.only(right: 12),
+                      width: responsive.dp(9.5),
+                      margin: EdgeInsets.only(right: responsive.wp(2)),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Avatar(
                             size: 90,
-                            radius: 30,
+                            radius: responsive.dp(50),
                             name: e.name,
+                            urlImage: e.urlImage,
                           ),
                           Text(
-                            e.name,
+                            e.name.split(" ")[0],
                             textAlign: TextAlign.center,
                             style: const TextStyle(
                               fontFamily: 'Montserrat',
@@ -157,7 +159,6 @@ class ListPersons extends StatelessWidget {
                       ),
                     ),
                   )),
-              const _ButtonAdd(),
             ],
           );
         },
@@ -173,6 +174,7 @@ class _ButtonAdd extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final responsive = Responsive.of(context);
     return GestureDetector(
       onTap: () {
         showModalBottomSheet(
@@ -183,13 +185,13 @@ class _ButtonAdd extends StatelessWidget {
             });
       },
       child: Container(
-        width: 90,
+        width: responsive.dp(10),
         margin: const EdgeInsets.only(right: 12),
         child: Container(
-          height: 90,
+          height: responsive.dp(10),
           decoration: BoxDecoration(
             color: const Color.fromARGB(255, 58, 58, 58).withOpacity(0.1),
-            borderRadius: const BorderRadius.all(Radius.circular(20)),
+            borderRadius: BorderRadius.all(Radius.circular(responsive.dp(50))),
           ),
           child: const Center(
             child: Text(

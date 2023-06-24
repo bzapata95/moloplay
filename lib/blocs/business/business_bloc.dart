@@ -5,6 +5,7 @@ import 'package:local_auth/local_auth.dart';
 import 'package:molopay/helpers/sql_helpers.dart';
 import 'package:molopay/models/person.dart';
 import 'package:molopay/models/transaction.dart';
+import 'package:molopay/utils/formatted_person.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../utils/formatted_currency.dart';
@@ -62,21 +63,12 @@ class BusinessBloc extends Bloc<BusinessEvent, BusinessState> {
         add(OnValidateIsSupportedAuthBiometricsEvent(isSupported)));
     final SharedPreferences pref = await SharedPreferences.getInstance();
     final isVisibilityTotalBalance = pref.getBool("isVisibilityTotalBalance");
-    final persons = await SQLHelper.getPersons();
+    List<Map<String, dynamic>> persons =
+        await SQLHelper.getPersonsWithTransactionRecent();
     await loadTransactions();
     await loadTotalBalance();
 
-    final formatted = persons
-        .map((e) => Person(
-              id: e['id'],
-              name: e['name'],
-              urlImage: e['urlImage'],
-              balance: double.tryParse(e['balance'].toString()) ?? 0,
-              createdAt: e['createdAt'],
-            ))
-        .toList();
-
-    add(OnLoadPersonsOfDbEvent(formatted));
+    add(OnLoadPersonsOfDbEvent(formattedPerson(persons)));
     add(OnInitialLoadSharedUserPreference(
         isVisibilityTotalBalance: isVisibilityTotalBalance ?? true));
   }
@@ -120,10 +112,12 @@ class BusinessBloc extends Bloc<BusinessEvent, BusinessState> {
             : (person.balance ?? 0) - amount;
 
         return Person(
-            id: person.id,
-            name: person.name,
-            balance: calculateAmount,
-            createdAt: person.createdAt);
+          id: person.id,
+          name: person.name,
+          balance: calculateAmount,
+          createdAt: person.createdAt,
+          urlImage: person.urlImage,
+        );
       }
       return e;
     }).toList();

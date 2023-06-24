@@ -6,8 +6,9 @@ import 'package:molopay/models/transaction.dart';
 import 'package:molopay/views/list_persons.dart';
 import 'package:molopay/widgets/avatar.dart';
 import 'package:onscreen_num_keyboard/onscreen_num_keyboard.dart';
-import 'package:slide_to_act/slide_to_act.dart';
+import 'package:slide_action/slide_action.dart';
 
+import '../app/presentation/global/colors.dart';
 import '../routes/routes.dart';
 
 class RegisterTransaction extends StatefulWidget {
@@ -245,6 +246,7 @@ class _RegisterTransactionState extends State<RegisterTransaction> {
                   ),
                   TextField(
                     focusNode: _focusNode,
+                    textCapitalization: TextCapitalization.characters,
                     onChanged: (value) {
                       description = value;
                       setState(() {});
@@ -296,24 +298,47 @@ class _RegisterTransactionState extends State<RegisterTransaction> {
               top: false,
               maintainBottomViewPadding: true,
               child: SlideAction(
-                innerColor: const Color(0xff348276),
-                outerColor: const Color(0xff1b1b1b),
-                borderRadius: 20,
-                height: 80,
-                text: 'swipe to register',
-                textStyle: TextStyle(
-                  fontFamily: 'Montserrat',
-                  color: Colors.white.withOpacity(0.7),
-                  fontSize: 16,
-                ),
-                elevation: 0,
-                sliderButtonIcon: const Icon(
-                  Icons.keyboard_arrow_right_sharp,
-                  color: Colors.white,
-                  size: 32,
-                ),
-                sliderRotate: false,
-                onSubmit: (amount.isEmpty ||
+                trackHeight: 70,
+                trackBuilder: (context, state) {
+                  return Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(50),
+                      color: Colors.grey.withOpacity(0.1),
+                      boxShadow: const [
+                        BoxShadow(
+                          color: Colors.black26,
+                          blurRadius: 8,
+                        ),
+                      ],
+                    ),
+                    child: const Center(
+                      child: Text(
+                        "Swipe to register",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontFamily: 'Montserrat',
+                        ),
+                      ),
+                    ),
+                  );
+                },
+                thumbBuilder: (context, state) {
+                  return Container(
+                    margin: const EdgeInsets.all(4),
+                    decoration: BoxDecoration(
+                      color: AppColors.green500,
+                      borderRadius: BorderRadius.circular(50),
+                    ),
+                    child: const Center(
+                      child: Icon(
+                        Icons.chevron_right,
+                        color: Colors.white,
+                        size: 30,
+                      ),
+                    ),
+                  );
+                },
+                action: (amount.isEmpty ||
                         description.isEmpty ||
                         businessBloc.state.personSelected == null ||
                         (personSelected != null &&
@@ -321,8 +346,12 @@ class _RegisterTransactionState extends State<RegisterTransaction> {
                             double.parse(amount) > personSelected.balance!))
                     ? null
                     : () async {
-                        onHandleRegisterTransaction(businessBloc);
+                        await onHandleRegisterTransaction(businessBloc);
                       },
+                disabledColorTint: Colors.grey,
+                stretchThumb: true,
+                snapAnimationCurve: Curves.bounceInOut,
+                actionSnapThreshold: 0.95,
               ),
             )
           ],

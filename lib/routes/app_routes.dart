@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:molopay/models/person.dart';
 import 'package:molopay/models/transaction.dart';
+import 'package:molopay/pages/all_persons_screen.dart';
 import 'package:molopay/pages/all_transaction_screen.dart';
 import 'package:molopay/pages/dashboard.dart';
 import 'package:molopay/pages/detail_transation.dart';
@@ -19,6 +20,7 @@ Map<String, Widget Function(BuildContext)> get appRoutes {
     Routes.registerTransaction: (_) => const RegisterTransaction(),
     Routes.authenticationScreen: (_) => const RegisterScreen(),
     Routes.allTransaction: (_) => const AllTransactionScreen(),
+    Routes.allPersons: (_) => const AllPersonsScreen(),
     Routes.profile: (context) {
       final person = getArguments<Person>(context);
       return ProfileScreen(person: person);

@@ -30,7 +30,7 @@ class SQLHelper {
   }
 
   static Future<sql.Database> db() async {
-    return sql.openDatabase('moloplay.db', version: 3,
+    return sql.openDatabase('moloplay.db', version: 4,
         onCreate: (sql.Database database, int versions) async {
       await createTables(database);
     });
@@ -59,8 +59,23 @@ class SQLHelper {
     return db.query(
       'persons',
       orderBy: 'createAt DESC',
-      limit: 15,
+      limit: 25,
     );
+  }
+
+  static Future<List<Map<String, dynamic>>>
+      getPersonsWithTransactionRecent() async {
+    final db = await SQLHelper.db();
+
+    final List<Map<String, dynamic>> result = await db.rawQuery(
+        'SELECT p.*, t.dateTransaction as dateTransaction  FROM persons p INNER JOIN transactions t ON t.personId = p.id GROUP BY t.personId ORDER BY t.createAt DESC LIMIT 5');
+
+    //convert
+    List<Map<String, dynamic>> convert = List.from(result);
+    convert.sort((a, b) => DateTime.parse(b['dateTransaction'])
+        .compareTo(DateTime.parse(a['dateTransaction'])));
+    print('convert: $convert');
+    return convert;
   }
 
   static Future<List<Map<String, dynamic>>> getPersonById(int id) async {

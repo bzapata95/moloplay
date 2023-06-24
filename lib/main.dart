@@ -32,12 +32,14 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  late final String initialRoute;
+  late String initialRoute;
 
   @override
   void initState() {
     super.initState();
-    initialization();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      initialization();
+    });
   }
 
   Future<void> initialization() async {

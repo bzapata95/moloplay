@@ -9,6 +9,8 @@ import 'package:molopay/utils/responsive.dart';
 import 'package:molopay/views/bottom_sheet_create_person.dart';
 import 'package:molopay/widgets/avatar.dart';
 
+import '../app/presentation/global/modal_action_person.dart';
+
 class ListPersons extends StatelessWidget {
   final bool hasOpenModal;
   // final TypeTransaction type;
@@ -17,17 +19,6 @@ class ListPersons extends StatelessWidget {
     this.hasOpenModal = true,
     // this.redirect = true,
   });
-
-  onHandleRegisterTransaction({
-    required BusinessBloc businessBloc,
-    required BuildContext context,
-    required Person person,
-    required TypeTransaction type,
-  }) {
-    businessBloc.add(OnRegisterTransactionEvent(person: person, type: type));
-    Navigator.pop(context);
-    Navigator.pushNamed(context, Routes.registerTransaction);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +32,6 @@ class ListPersons extends StatelessWidget {
             scrollDirection: Axis.horizontal,
             padding: const EdgeInsets.only(left: 20),
             children: [
-              const _ButtonAdd(),
               ...state.persons.map((e) => GestureDetector(
                     onTap: () {
                       if (hasOpenModal == false &&
@@ -52,87 +42,7 @@ class ListPersons extends StatelessWidget {
                         return;
                       }
 
-                      showCupertinoModalPopup(
-                        context: context,
-                        builder: (BuildContext context) => CupertinoActionSheet(
-                          title: Text('Operation'),
-                          actions: <Widget>[
-                            CupertinoActionSheetAction(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: const [
-                                  Text('Profile'),
-                                  SizedBox(
-                                    width: 5,
-                                  ),
-                                  Icon(
-                                    Icons.person,
-                                    color: Colors.blueAccent,
-                                  )
-                                ],
-                              ),
-                              onPressed: () {
-                                Navigator.pop(context);
-                                Navigator.pushNamed(context, Routes.profile,
-                                    arguments: e);
-                                // Acción a realizar al seleccionar la opción 2
-                              },
-                            ),
-                            CupertinoActionSheetAction(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: const [
-                                  Text(
-                                    'Give',
-                                    style: TextStyle(color: Colors.redAccent),
-                                  ),
-                                  SizedBox(
-                                    width: 5,
-                                  ),
-                                  Icon(
-                                    Icons.arrow_upward_outlined,
-                                    color: Colors.redAccent,
-                                  )
-                                ],
-                              ),
-                              onPressed: () {
-                                onHandleRegisterTransaction(
-                                  businessBloc: businessBloc,
-                                  context: context,
-                                  person: e,
-                                  type: TypeTransaction.give,
-                                );
-                              },
-                            ),
-                            CupertinoActionSheetAction(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: const [
-                                  Text(
-                                    'Receive',
-                                    style: TextStyle(color: Colors.greenAccent),
-                                  ),
-                                  SizedBox(
-                                    width: 5,
-                                  ),
-                                  Icon(
-                                    Icons.arrow_downward_outlined,
-                                    color: Colors.greenAccent,
-                                  )
-                                ],
-                              ),
-                              onPressed: () {
-                                onHandleRegisterTransaction(
-                                  businessBloc: businessBloc,
-                                  context: context,
-                                  person: e,
-                                  type: TypeTransaction.receive,
-                                );
-                              },
-                            ),
-                          ],
-                        ),
-                      );
+                      openModalActionPerson(context, e);
                     },
                     child: Container(
                       width: responsive.dp(9.5),
@@ -159,6 +69,7 @@ class ListPersons extends StatelessWidget {
                       ),
                     ),
                   )),
+              const _ButtonAdd(),
             ],
           );
         },

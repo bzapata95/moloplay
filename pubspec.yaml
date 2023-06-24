@@ -32,7 +32,6 @@ dependencies:
     sdk: flutter
   cupertino_icons: ^1.0.2
   onscreen_num_keyboard: ^1.0.4
-  slide_to_act: ^2.0.1
   flutter_native_splash: ^2.2.19
   bloc: ^8.1.1
   equatable: ^2.0.5
@@ -45,6 +44,7 @@ dependencies:
   permission_handler: ^10.2.0
   image_picker: ^0.8.7+5
   cloudinary_public: ^0.21.0
+  slide_action: ^0.0.2
 
 dev_dependencies:
   flutter_test:

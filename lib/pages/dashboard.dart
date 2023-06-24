@@ -46,9 +46,12 @@ class Dashboard extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20)
                         .copyWith(top: 40, bottom: 10),
-                    child: const Header(
+                    child: Header(
                       title: 'Recent',
                       titleButton: 'view all',
+                      onRedirect: () {
+                        Navigator.pushNamed(context, Routes.allPersons);
+                      },
                     ),
                   ),
                   const SizedBox(

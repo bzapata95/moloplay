@@ -141,7 +141,7 @@ class _RegisterTransactionState extends State<RegisterTransaction> {
                                     ),
                                     if (state.personSelected != null)
                                       Text(
-                                        'Debe: S/ ${state.personSelected!.balance != null ? state.personSelected!.balance?.toStringAsFixed(2) : 0}',
+                                        'Debt: S/ ${state.personSelected!.balance != null ? state.personSelected!.balance?.toStringAsFixed(2) : 0}',
                                         style: TextStyle(
                                             fontFamily: 'Montserrat',
                                             color:
@@ -347,6 +347,15 @@ class _RegisterTransactionState extends State<RegisterTransaction> {
                     ? null
                     : () async {
                         await onHandleRegisterTransaction(businessBloc);
+                        if (mounted) {
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(const SnackBar(
+                                  backgroundColor: AppColors.green500,
+                                  content: Text(
+                                    'Transaction done!',
+                                    style: TextStyle(color: AppColors.white),
+                                  )));
+                        }
                       },
                 disabledColorTint: Colors.grey,
                 stretchThumb: true,

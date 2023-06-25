@@ -10,6 +10,7 @@ import 'package:molopay/views/bottom_sheet_create_person.dart';
 import 'package:molopay/widgets/avatar.dart';
 
 import '../app/presentation/global/modal_action_person.dart';
+import '../app/presentation/global/open_modal_add_person.dart';
 
 class ListPersons extends StatelessWidget {
   final bool hasOpenModal;
@@ -88,12 +89,7 @@ class _ButtonAdd extends StatelessWidget {
     final responsive = Responsive.of(context);
     return GestureDetector(
       onTap: () {
-        showModalBottomSheet(
-            context: context,
-            backgroundColor: Colors.transparent,
-            builder: (_) {
-              return const BottomSheetCreatePerson();
-            });
+        openModalAddPerson(context);
       },
       child: Container(
         width: responsive.dp(10),

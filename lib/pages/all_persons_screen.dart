@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:molopay/app/presentation/global/colors.dart';
 import 'package:molopay/app/presentation/global/modal_action_person.dart';
@@ -6,6 +8,7 @@ import 'package:molopay/utils/formatted_currency.dart';
 import 'package:molopay/utils/formatted_person.dart';
 import 'package:molopay/widgets/avatar.dart';
 
+import '../app/presentation/global/open_modal_add_person.dart';
 import '../helpers/sql_helpers.dart';
 
 class AllPersonsScreen extends StatefulWidget {
@@ -16,46 +19,82 @@ class AllPersonsScreen extends StatefulWidget {
 }
 
 class _AllPersonsScreenState extends State<AllPersonsScreen> {
-  String searchText = "";
+  TextEditingController _controller = TextEditingController();
+  String searchText = '';
   List<Person> persons = [];
 
-  Future<void> onLoadTransactions() async {
+  Future<void> onLoadPersons() async {
     final transactionsSql = await SQLHelper.getPersons();
     persons = formattedPerson(transactionsSql);
     setState(() {});
   }
 
+  Future<void> onSearchPerson(String searchText) async {
+    if (searchText.isNotEmpty) {
+      final transactionsSql = await SQLHelper.searchPerson(searchText);
+      persons = formattedPerson(transactionsSql);
+      setState(() {});
+    } else {
+      onLoadPersons();
+    }
+  }
+
   @override
   void initState() {
     super.initState();
-    onLoadTransactions();
+    onLoadPersons();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        actions: [
+          IconButton(
+              onPressed: () {
+                openModalAddPerson(context, onRegister: () async {
+                  Future.delayed(const Duration(milliseconds: 100), () {
+                    onLoadPersons();
+                  });
+                });
+              },
+              icon: const Icon(Icons.add)),
+        ],
         title: TextField(
+          controller: _controller,
           textInputAction: TextInputAction.search,
-          onSubmitted: (value) {},
-          onChanged: (e) {
+          onSubmitted: (value) {
+            onSearchPerson(value);
+          },
+          onChanged: (v) {
             setState(() {
-              searchText = e;
+              searchText = v;
             });
           },
           decoration: InputDecoration(
-            fillColor: AppColors.green500,
-            hintStyle: TextStyle(color: Colors.grey.withOpacity(0.5)),
-            hintText: 'Search person',
-            prefixIcon: const Icon(
-              Icons.search,
-            ),
-            hoverColor: AppColors.green500,
-            focusColor: AppColors.green500,
-            prefixIconColor: Colors.grey.withOpacity(0.5),
-            enabledBorder: InputBorder.none,
-            focusedBorder: InputBorder.none,
-          ),
+              fillColor: AppColors.green500,
+              hintStyle: TextStyle(color: Colors.grey.withOpacity(0.5)),
+              hintText: 'Search person',
+              prefixIcon: const Icon(
+                Icons.search,
+              ),
+              hoverColor: AppColors.green500,
+              focusColor: AppColors.green500,
+              prefixIconColor: Colors.grey.withOpacity(0.5),
+              enabledBorder: InputBorder.none,
+              focusedBorder: InputBorder.none,
+              suffixIcon: searchText.isNotEmpty
+                  ? IconButton(
+                      icon: const Icon(Icons.clear),
+                      onPressed: () {
+                        setState(() {
+                          searchText = '';
+                        });
+                        _controller.clear();
+                        onLoadPersons();
+                      },
+                    )
+                  : null),
         ),
       ),
       body: ListView.builder(
@@ -96,7 +135,7 @@ class _AllPersonsScreenState extends State<AllPersonsScreen> {
                               ),
                               Row(
                                 children: [
-                                  const Text('Debe: '),
+                                  const Text('Debt: '),
                                   const SizedBox(
                                     width: 5,
                                   ),

@@ -63,6 +63,13 @@ class SQLHelper {
     );
   }
 
+  static Future<List<Map<String, dynamic>>> searchPerson(String term) async {
+    final db = await SQLHelper.db();
+    final result = await db.rawQuery(
+        "SELECT * FROM persons p WHERE p.name LIKE '%${term.toLowerCase()}%'");
+    return result;
+  }
+
   static Future<List<Map<String, dynamic>>>
       getPersonsWithTransactionRecent() async {
     final db = await SQLHelper.db();
@@ -74,7 +81,6 @@ class SQLHelper {
     List<Map<String, dynamic>> convert = List.from(result);
     convert.sort((a, b) => DateTime.parse(b['dateTransaction'])
         .compareTo(DateTime.parse(a['dateTransaction'])));
-    print('convert: $convert');
     return convert;
   }
 

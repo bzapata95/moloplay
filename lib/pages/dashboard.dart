@@ -5,10 +5,18 @@ import 'package:molopay/blocs/business/business_bloc.dart';
 import 'package:molopay/models/transaction.dart';
 import 'package:molopay/routes/routes.dart';
 import 'package:molopay/views/list_persons.dart';
+import 'package:molopay/widgets/avatar.dart';
 import 'package:molopay/widgets/button.dart';
 import 'package:molopay/widgets/card_transaction.dart';
 import 'package:molopay/widgets/header.dart';
 import 'package:local_auth/local_auth.dart';
+
+class ItemListTile {
+  final String title;
+  final String route;
+
+  ItemListTile(this.title, this.route);
+}
 
 class Dashboard extends StatelessWidget {
   const Dashboard({super.key});
@@ -17,11 +25,70 @@ class Dashboard extends StatelessWidget {
   Widget build(BuildContext context) {
     final keyScaffold = GlobalKey<ScaffoldState>();
     final businessBloc = BlocProvider.of<BusinessBloc>(context, listen: true);
+    final authenticationBloc =
+        BlocProvider.of<AuthenticationBloc>(context, listen: false);
+
+    generateListTile(List<ItemListTile> items) {
+      return items.map(
+        (e) => ListTile(
+          contentPadding: EdgeInsets.zero,
+          onTap: () {
+            keyScaffold.currentState!.closeDrawer();
+            Navigator.pushNamed(context, e.route);
+          },
+          title: Text(
+            e.title,
+            style: const TextStyle(
+              fontFamily: 'Montserrat',
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ),
+      );
+    }
 
     return Scaffold(
       key: keyScaffold,
-      drawer: const Drawer(
-        child: SafeArea(child: Text("In Construction")),
+      drawer: Drawer(
+        child: SafeArea(
+            child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  Container(
+                    width: 60,
+                    height: 60,
+                    decoration:
+                        BoxDecoration(borderRadius: BorderRadius.circular(30)),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(30),
+                      child: Image.network(
+                        'https://github.com/bzapata95.png',
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  Text(
+                    authenticationBloc.username,
+                    style: const TextStyle(
+                      fontFamily: 'Montserrat',
+                      fontWeight: FontWeight.bold,
+                    ),
+                  )
+                ],
+              ),
+              Divider(
+                height: 50,
+              ),
+              ...generateListTile([ItemListTile('Contacts', Routes.allPersons)])
+            ],
+          ),
+        )),
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.white,

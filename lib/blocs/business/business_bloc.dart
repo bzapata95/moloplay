@@ -63,14 +63,19 @@ class BusinessBloc extends Bloc<BusinessEvent, BusinessState> {
         add(OnValidateIsSupportedAuthBiometricsEvent(isSupported)));
     final SharedPreferences pref = await SharedPreferences.getInstance();
     final isVisibilityTotalBalance = pref.getBool("isVisibilityTotalBalance");
-    List<Map<String, dynamic>> persons =
-        await SQLHelper.getPersonsWithTransactionRecent();
+
+    await loadPersonsRecent();
     await loadTransactions();
     await loadTotalBalance();
 
-    add(OnLoadPersonsOfDbEvent(formattedPerson(persons)));
     add(OnInitialLoadSharedUserPreference(
         isVisibilityTotalBalance: isVisibilityTotalBalance ?? true));
+  }
+
+  Future<void> loadPersonsRecent() async {
+    List<Map<String, dynamic>> persons =
+        await SQLHelper.getPersonsWithTransactionRecent();
+    add(OnLoadPersonsOfDbEvent(formattedPerson(persons)));
   }
 
   Future<void> loadTransactions() async {
@@ -89,7 +94,7 @@ class BusinessBloc extends Bloc<BusinessEvent, BusinessState> {
     final personInsert = await SQLHelper.createPerson(name: event.name);
     final person = Person(
         id: personInsert, name: event.name, balance: double.parse('0.0'));
-    emit(state.copyWith(persons: [person, ...state.persons]));
+    // emit(state.copyWith(persons: [person, ...state.persons]));
   }
 
   _onCreateTransaction(
@@ -121,7 +126,8 @@ class BusinessBloc extends Bloc<BusinessEvent, BusinessState> {
       }
       return e;
     }).toList();
-    await Future.wait([loadTotalBalance(), loadTransactions()]);
-    add(OnLoadPersonsOfDbEvent(newMap));
+    await Future.wait(
+        [loadTotalBalance(), loadTransactions(), loadPersonsRecent()]);
+    // add(OnLoadPersonsOfDbEvent(newMap));
   }
 }

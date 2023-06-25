@@ -7,6 +7,8 @@ part 'authentication_state.dart';
 
 class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
+  String get username => state.username;
+
   AuthenticationBloc() : super(const AuthenticationState()) {
     on<RegisterUserEvent>((event, emit) async {
       final SharedPreferences pref = await SharedPreferences.getInstance();

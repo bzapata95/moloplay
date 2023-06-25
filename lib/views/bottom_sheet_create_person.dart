@@ -4,11 +4,18 @@ import 'package:molopay/blocs/business/business_bloc.dart';
 import 'package:molopay/widgets/button.dart';
 
 class BottomSheetCreatePerson extends StatelessWidget {
-  const BottomSheetCreatePerson({super.key});
+  final Function? onRegister;
+  const BottomSheetCreatePerson({
+    super.key,
+    this.onRegister,
+  });
 
   handleSendPerson(BuildContext context, name) {
     final blocBusiness = BlocProvider.of<BusinessBloc>(context);
     blocBusiness.add(OnAddPersonEvent(name));
+    if (onRegister != null) {
+      onRegister!();
+    }
     Navigator.pop(context);
   }
 

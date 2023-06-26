@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:molopay/app/presentation/global/colors.dart';
 import 'package:molopay/blocs/authentication/authentication_bloc.dart';
 import 'package:molopay/blocs/business/business_bloc.dart';
 import 'package:molopay/models/transaction.dart';
@@ -11,12 +12,7 @@ import 'package:molopay/widgets/card_transaction.dart';
 import 'package:molopay/widgets/header.dart';
 import 'package:local_auth/local_auth.dart';
 
-class ItemListTile {
-  final String title;
-  final String route;
-
-  ItemListTile(this.title, this.route);
-}
+import '../views/drawer_content.dart';
 
 class Dashboard extends StatelessWidget {
   const Dashboard({super.key});
@@ -25,83 +21,24 @@ class Dashboard extends StatelessWidget {
   Widget build(BuildContext context) {
     final keyScaffold = GlobalKey<ScaffoldState>();
     final businessBloc = BlocProvider.of<BusinessBloc>(context, listen: true);
-    final authenticationBloc =
-        BlocProvider.of<AuthenticationBloc>(context, listen: false);
-
-    generateListTile(List<ItemListTile> items) {
-      return items.map(
-        (e) => ListTile(
-          contentPadding: EdgeInsets.zero,
-          onTap: () {
-            keyScaffold.currentState!.closeDrawer();
-            Navigator.pushNamed(context, e.route);
-          },
-          title: Text(
-            e.title,
-            style: const TextStyle(
-              fontFamily: 'Montserrat',
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-        ),
-      );
-    }
 
     return Scaffold(
       key: keyScaffold,
       drawer: Drawer(
-        child: SafeArea(
-            child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: Column(
-            children: [
-              Row(
-                children: [
-                  Container(
-                    width: 60,
-                    height: 60,
-                    decoration:
-                        BoxDecoration(borderRadius: BorderRadius.circular(30)),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(30),
-                      child: Image.network(
-                        'https://github.com/bzapata95.png',
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  Text(
-                    authenticationBloc.username,
-                    style: const TextStyle(
-                      fontFamily: 'Montserrat',
-                      fontWeight: FontWeight.bold,
-                    ),
-                  )
-                ],
-              ),
-              Divider(
-                height: 50,
-              ),
-              ...generateListTile([ItemListTile('Contacts', Routes.allPersons)])
-            ],
-          ),
-        )),
+        child: DrawerContentView(keyScaffold: keyScaffold),
       ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.white,
-        onPressed: () {
-          businessBloc.add(
-              const OnRegisterTransactionEvent(type: TypeTransaction.receive));
-          Navigator.pushNamed(context, Routes.registerTransaction);
-        },
-        child: const Icon(
-          Icons.move_to_inbox_rounded,
-          size: 28,
-        ),
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   backgroundColor: Colors.white,
+      //   onPressed: () {
+      //     businessBloc.add(
+      //         const OnRegisterTransactionEvent(type: TypeTransaction.receive));
+      //     Navigator.pushNamed(context, Routes.registerTransaction);
+      //   },
+      //   child: const Icon(
+      //     Icons.move_to_inbox_rounded,
+      //     size: 28,
+      //   ),
+      // ),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -113,12 +50,12 @@ class Dashboard extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20)
                         .copyWith(top: 40, bottom: 10),
-                    child: Header(
+                    child: const Header(
                       title: 'Recent',
-                      titleButton: 'view all',
-                      onRedirect: () {
-                        Navigator.pushNamed(context, Routes.allPersons);
-                      },
+                      // titleButton: 'view all',
+                      // onRedirect: () {
+                      //   Navigator.pushNamed(context, Routes.allPersons);
+                      // },
                     ),
                   ),
                   const SizedBox(
@@ -362,6 +299,13 @@ class _HeaderDashboard extends StatelessWidget {
                                 },
                                 label: 'Receive',
                                 colorButton: enumColorButton.white,
+                                icon: Transform.rotate(
+                                  angle: 380,
+                                  child: const Icon(
+                                    Icons.arrow_outward_rounded,
+                                    color: AppColors.black800,
+                                  ),
+                                ),
                               ),
                             ),
                             const SizedBox(
@@ -369,15 +313,17 @@ class _HeaderDashboard extends StatelessWidget {
                             ),
                             Expanded(
                               child: Button(
-                                  onPressed: () {
-                                    businessBloc.add(
-                                        const OnRegisterTransactionEvent(
-                                            person: null,
-                                            type: TypeTransaction.give));
-                                    Navigator.pushNamed(
-                                        context, Routes.registerTransaction);
-                                  },
-                                  label: 'Give'),
+                                onPressed: () {
+                                  businessBloc.add(
+                                      const OnRegisterTransactionEvent(
+                                          person: null,
+                                          type: TypeTransaction.give));
+                                  Navigator.pushNamed(
+                                      context, Routes.registerTransaction);
+                                },
+                                label: 'Give',
+                                icon: Icon(Icons.arrow_outward_rounded),
+                              ),
                             )
                           ],
                         ),

@@ -4,14 +4,16 @@ enum enumColorButton { white, black }
 
 class Button extends StatelessWidget {
   final Function()? onPressed;
+  final Widget? icon;
   final String label;
   final enumColorButton colorButton;
 
   const Button({
     super.key,
-    this.onPressed,
     required this.label,
+    this.onPressed,
     this.colorButton = enumColorButton.black,
+    this.icon,
   });
 
   @override
@@ -25,14 +27,30 @@ class Button extends StatelessWidget {
             colorButton == enumColorButton.black ? Colors.black : Colors.white,
         padding: const EdgeInsets.symmetric(vertical: 20),
       ),
-      child: Text(
-        label,
-        style: TextStyle(
-            fontFamily: 'Montserrat',
-            fontWeight: FontWeight.bold,
-            color: colorButton == enumColorButton.black
-                ? Colors.white
-                : Colors.black),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          if (icon != null)
+            Row(
+              children: [
+                Center(child: icon),
+                const SizedBox(
+                  width: 5,
+                ),
+              ],
+            ),
+          Text(
+            label,
+            style: TextStyle(
+              fontFamily: 'Montserrat',
+              fontWeight: FontWeight.bold,
+              color: colorButton == enumColorButton.black
+                  ? Colors.white
+                  : Colors.black,
+            ),
+          ),
+        ],
       ),
     );
   }

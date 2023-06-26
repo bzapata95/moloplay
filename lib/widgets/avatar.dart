@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class Avatar extends StatelessWidget {
@@ -25,11 +26,11 @@ class Avatar extends StatelessWidget {
       child: urlImage != null
           ? ClipRRect(
               borderRadius: BorderRadius.circular(radius),
-              child: Image.network(
-                urlImage!,
-                width: size,
-                height: size,
+              child: CachedNetworkImage(
                 fit: BoxFit.cover,
+                imageUrl: urlImage!,
+                placeholder: (context, url) => CircularProgressIndicator(),
+                errorWidget: (context, url, error) => const Icon(Icons.error),
               ),
             )
           : Center(

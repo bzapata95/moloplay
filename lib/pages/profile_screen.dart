@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:molopay/helpers/sql_helpers.dart';
 import 'package:molopay/helpers/storage_helpers.dart';
 import 'package:molopay/models/person.dart';
@@ -72,12 +73,40 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
 
     if (response != null) {
-      final urlSecure = await _storageHelper.uploadImage(response);
+      CroppedFile? croppedFile = await ImageCropper().cropImage(
+        sourcePath: response,
+        aspectRatio: const CropAspectRatio(ratioX: 1, ratioY: 1),
+        cropStyle: CropStyle.circle,
+        aspectRatioPresets: [
+          CropAspectRatioPreset.square,
+        ],
+        uiSettings: [
+          // AndroidUiSettings(
+          //     toolbarTitle: 'Cropper',
+          //     toolbarColor: Colors.deepOrange,
+          //     toolbarWidgetColor: Colors.white,
+          //     initAspectRatio: CropAspectRatioPreset.original,
+          //     lockAspectRatio: false),
+          IOSUiSettings(
+            title: 'Cropper',
+          ),
+          // WebUiSettings(
+          //   context: context,
+          // ),
+        ],
+      );
+
+      if (croppedFile == null) return;
+
+      final urlSecure = await _storageHelper.uploadImage(croppedFile.path);
       if (urlSecure != null) {
         _urlPath = urlSecure;
         await SQLHelper.updateUrlImagePerson(
             urlImage: urlSecure, idPerson: widget.person.id);
         setState(() {});
+        if (mounted) {
+          Navigator.pop(context);
+        }
       }
     }
   }

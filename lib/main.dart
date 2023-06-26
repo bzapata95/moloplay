@@ -32,29 +32,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  late String initialRoute;
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      initialization();
-    });
-  }
-
-  Future<void> initialization() async {
-    final authenticationBloc = BlocProvider.of<AuthenticationBloc>(context);
-    final isAuth = await authenticationBloc.verifyAuthenticationUser();
-
-    if (isAuth == false) {
-      initialRoute = Routes.authenticationScreen;
-    } else {
-      initialRoute = Routes.dashboard;
-    }
-    setState(() {});
-    FlutterNativeSplash.remove();
-  }
-
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -76,7 +53,7 @@ class _MyAppState extends State<MyApp> {
           dividerColor: Colors.grey.withOpacity(0.5),
         ),
         routes: appRoutes,
-        initialRoute: initialRoute,
+        initialRoute: Routes.splash,
       ),
     );
   }

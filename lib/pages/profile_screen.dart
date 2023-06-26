@@ -77,6 +77,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         sourcePath: response,
         aspectRatio: const CropAspectRatio(ratioX: 1, ratioY: 1),
         cropStyle: CropStyle.circle,
+        compressQuality: 100,
         aspectRatioPresets: [
           CropAspectRatioPreset.square,
         ],

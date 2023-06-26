@@ -66,7 +66,6 @@ class CardTransaction extends StatelessWidget {
                         fontSize: 13,
                         fontFamily: 'Montserrat',
                         color: Colors.white.withOpacity(0.7),
-                        fontWeight: FontWeight.w700,
                       ),
                     ),
                   ),

@@ -22,7 +22,10 @@ Map<String, Widget Function(BuildContext)> get appRoutes {
     Routes.registerTransaction: (_) => const RegisterTransaction(),
     Routes.authenticationScreen: (_) => const RegisterScreen(),
     Routes.allTransaction: (_) => const AllTransactionScreen(),
-    Routes.allPersons: (_) => const AllPersonsScreen(),
+    Routes.allPersons: (context) {
+      final onlySelect = getArguments<Map<String, bool>?>(context);
+      return AllPersonsScreen(onlySelect: onlySelect?['onlySelect'] ?? false);
+    },
     Routes.profile: (context) {
       final person = getArguments<Person>(context);
       return ProfileScreen(person: person);

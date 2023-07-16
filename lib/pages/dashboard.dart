@@ -27,18 +27,6 @@ class Dashboard extends StatelessWidget {
       drawer: Drawer(
         child: DrawerContentView(keyScaffold: keyScaffold),
       ),
-      // floatingActionButton: FloatingActionButton(
-      //   backgroundColor: Colors.white,
-      //   onPressed: () {
-      //     businessBloc.add(
-      //         const OnRegisterTransactionEvent(type: TypeTransaction.receive));
-      //     Navigator.pushNamed(context, Routes.registerTransaction);
-      //   },
-      //   child: const Icon(
-      //     Icons.move_to_inbox_rounded,
-      //     size: 28,
-      //   ),
-      // ),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -52,10 +40,6 @@ class Dashboard extends StatelessWidget {
                         .copyWith(top: 40, bottom: 10),
                     child: const Header(
                       title: 'Recent',
-                      // titleButton: 'view all',
-                      // onRedirect: () {
-                      //   Navigator.pushNamed(context, Routes.allPersons);
-                      // },
                     ),
                   ),
                   const SizedBox(
@@ -295,7 +279,10 @@ class _HeaderDashboard extends StatelessWidget {
                                           person: null,
                                           type: TypeTransaction.receive));
                                   Navigator.pushNamed(
-                                      context, Routes.registerTransaction);
+                                    context,
+                                    Routes.allPersons,
+                                    arguments: {'onlySelect': true},
+                                  );
                                 },
                                 label: 'Receive',
                                 colorButton: enumColorButton.white,
@@ -319,10 +306,13 @@ class _HeaderDashboard extends StatelessWidget {
                                           person: null,
                                           type: TypeTransaction.give));
                                   Navigator.pushNamed(
-                                      context, Routes.registerTransaction);
+                                    context,
+                                    Routes.allPersons,
+                                    arguments: {'onlySelect': true},
+                                  );
                                 },
                                 label: 'Give',
-                                icon: Icon(Icons.arrow_outward_rounded),
+                                icon: const Icon(Icons.arrow_outward_rounded),
                               ),
                             )
                           ],

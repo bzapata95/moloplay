@@ -4,6 +4,7 @@ class Person {
   final String? urlImage;
   final DateTime? createdAt;
   final double? balance;
+  final DateTime? dateTransaction;
 
   Person({
     required this.id,
@@ -11,5 +12,6 @@ class Person {
     this.urlImage,
     this.createdAt,
     this.balance,
+    this.dateTransaction,
   });
 }

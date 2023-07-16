@@ -75,7 +75,7 @@ class SQLHelper {
     final db = await SQLHelper.db();
 
     final List<Map<String, dynamic>> result = await db.rawQuery(
-        'SELECT p.*, t.dateTransaction as dateTransaction  FROM persons p INNER JOIN transactions t ON t.personId = p.id GROUP BY t.personId ORDER BY t.createAt DESC LIMIT 5');
+        'SELECT p.*, t.dateTransaction as dateTransaction  FROM persons p INNER JOIN transactions t ON t.personId = p.id ORDER BY t.createAt DESC LIMIT 5');
 
     //convert
     List<Map<String, dynamic>> convert = List.from(result);

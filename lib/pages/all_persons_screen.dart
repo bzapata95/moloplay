@@ -25,14 +25,14 @@ class _AllPersonsScreenState extends State<AllPersonsScreen> {
 
   Future<void> onLoadPersons() async {
     final transactionsSql = await SQLHelper.getPersons();
-    persons = formattedPerson(transactionsSql);
+    persons = formattedPerson(transactionsSql, withDateTransaction: false);
     setState(() {});
   }
 
   Future<void> onSearchPerson(String searchText) async {
     if (searchText.isNotEmpty) {
       final transactionsSql = await SQLHelper.searchPerson(searchText);
-      persons = formattedPerson(transactionsSql);
+      persons = formattedPerson(transactionsSql, withDateTransaction: false);
       setState(() {});
     } else {
       onLoadPersons();

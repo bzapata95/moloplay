@@ -75,7 +75,17 @@ class BusinessBloc extends Bloc<BusinessEvent, BusinessState> {
   Future<void> loadPersonsRecent() async {
     List<Map<String, dynamic>> persons =
         await SQLHelper.getPersonsWithTransactionRecent();
-    add(OnLoadPersonsOfDbEvent(formattedPerson(persons)));
+    var result = formattedPerson(persons);
+    result.sort((a, b) => b.dateTransaction!.compareTo(a.dateTransaction!));
+
+    //Los ponemos en un MAP
+    Map<int, Person> uniqueObjectsMap = {};
+
+    for (Person obj in result) {
+      uniqueObjectsMap[obj.id] = obj;
+    }
+
+    add(OnLoadPersonsOfDbEvent(uniqueObjectsMap.values.toList()));
   }
 
   Future<void> loadTransactions() async {

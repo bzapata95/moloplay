@@ -6,7 +6,6 @@ import 'package:molopay/blocs/business/business_bloc.dart';
 import 'package:molopay/models/transaction.dart';
 import 'package:molopay/routes/routes.dart';
 import 'package:molopay/views/list_persons.dart';
-import 'package:molopay/widgets/avatar.dart';
 import 'package:molopay/widgets/button.dart';
 import 'package:molopay/widgets/card_transaction.dart';
 import 'package:molopay/widgets/header.dart';

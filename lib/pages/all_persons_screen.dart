@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:molopay/app/presentation/global/colors.dart';
-import 'package:molopay/app/presentation/global/modal_action_person.dart';
 import 'package:molopay/models/person.dart';
 import 'package:molopay/routes/routes.dart';
 import 'package:molopay/utils/formatted_currency.dart';
@@ -13,7 +12,7 @@ import 'package:molopay/widgets/avatar.dart';
 import '../app/presentation/global/open_modal_add_person.dart';
 import '../blocs/business/business_bloc.dart';
 import '../helpers/sql_helpers.dart';
-import '../models/transaction.dart';
+import '../views/bottom_sheet_user.dart';
 
 class AllPersonsScreen extends StatefulWidget {
   const AllPersonsScreen({super.key, this.onlySelect = false});
@@ -25,7 +24,7 @@ class AllPersonsScreen extends StatefulWidget {
 }
 
 class _AllPersonsScreenState extends State<AllPersonsScreen> {
-  TextEditingController _controller = TextEditingController();
+  final TextEditingController _controller = TextEditingController();
   String searchText = '';
   List<Person> persons = [];
 
@@ -122,7 +121,16 @@ class _AllPersonsScreenState extends State<AllPersonsScreen> {
                             context, Routes.registerTransaction);
                       }
                     }
-                  : null,
+                  : () {
+                      showModalBottomSheet(
+                          context: context,
+                          backgroundColor: Colors.transparent,
+                          builder: (_) {
+                            return BottomSheerUser(
+                              person: person,
+                            );
+                          });
+                    },
               title: Column(
                 children: [
                   SizedBox(
@@ -174,12 +182,6 @@ class _AllPersonsScreenState extends State<AllPersonsScreen> {
                             )
                           ],
                         ),
-                        if (!widget.onlySelect)
-                          IconButton(
-                              onPressed: () {
-                                openModalActionPerson(context, person);
-                              },
-                              icon: const Icon(Icons.more_vert_outlined)),
                       ],
                     ),
                   ),

@@ -1,15 +1,10 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:molopay/blocs/business/business_bloc.dart';
-import 'package:molopay/models/person.dart';
-import 'package:molopay/models/transaction.dart';
-import 'package:molopay/routes/routes.dart';
 import 'package:molopay/utils/responsive.dart';
-import 'package:molopay/views/bottom_sheet_create_person.dart';
+import 'package:molopay/views/bottom_sheet_user.dart';
 import 'package:molopay/widgets/avatar.dart';
 
-import '../app/presentation/global/modal_action_person.dart';
 import '../app/presentation/global/open_modal_add_person.dart';
 
 class ListPersons extends StatelessWidget {
@@ -43,7 +38,16 @@ class ListPersons extends StatelessWidget {
                         return;
                       }
 
-                      openModalActionPerson(context, e);
+                      showModalBottomSheet(
+                          context: context,
+                          backgroundColor: Colors.transparent,
+                          builder: (_) {
+                            return BottomSheerUser(
+                              person: e,
+                            );
+                          });
+
+                      // openModalActionPerson(context, e);
                     },
                     child: Container(
                       width: responsive.dp(9.5),

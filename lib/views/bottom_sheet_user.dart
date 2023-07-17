@@ -26,16 +26,14 @@ class BottomSheerUser extends StatelessWidget {
       child: Stack(
         alignment: Alignment.center,
         children: [
-          Expanded(
-            child: Container(
-              height: 300,
-              decoration: const BoxDecoration(
-                  color: Color.fromARGB(255, 27, 27, 27),
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(40),
-                    topRight: Radius.circular(40),
-                  )),
-            ),
+          Container(
+            height: 300,
+            decoration: const BoxDecoration(
+                color: Color.fromARGB(255, 27, 27, 27),
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(40),
+                  topRight: Radius.circular(40),
+                )),
           ),
           Transform.translate(
             offset: const Offset(0, -40),

@@ -25,7 +25,7 @@ class BusinessBloc extends Bloc<BusinessEvent, BusinessState> {
           personSelected: null,
           transactions: [],
         )) {
-    on<OnAddPersonEvent>(_onAddPersons);
+    on<OnAddPersonEvent>(((event, emit) => emit(state.copyWith())));
     on<OnLoadPersonsOfDbEvent>(((event, emit) => emit(state.copyWith(
           persons: event.persons,
         ))));
@@ -100,11 +100,12 @@ class BusinessBloc extends Bloc<BusinessEvent, BusinessState> {
     add(OnLoadTotalBalanceEvent(formattedAmount));
   }
 
-  _onAddPersons(OnAddPersonEvent event, Emitter<BusinessState> emit) async {
-    final personInsert = await SQLHelper.createPerson(name: event.name);
-    final person = Person(
-        id: personInsert, name: event.name, balance: double.parse('0.0'));
-    // emit(state.copyWith(persons: [person, ...state.persons]));
+  Future<Person> onAddPersons(String name) async {
+    final personInsert = await SQLHelper.createPerson(name: name);
+    add(OnAddPersonEvent(name));
+    final person =
+        Person(id: personInsert, name: name, balance: double.parse('0.0'));
+    return person;
   }
 
   _onCreateTransaction(

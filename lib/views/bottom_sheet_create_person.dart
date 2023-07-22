@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:molopay/blocs/business/business_bloc.dart';
 import 'package:molopay/widgets/button.dart';
 
+import 'bottom_sheet_user.dart';
+
 class BottomSheetCreatePerson extends StatelessWidget {
   final Function? onRegister;
   const BottomSheetCreatePerson({
@@ -10,13 +12,23 @@ class BottomSheetCreatePerson extends StatelessWidget {
     this.onRegister,
   });
 
-  handleSendPerson(BuildContext context, name) {
+  handleSendPerson(BuildContext context, name) async {
     final blocBusiness = BlocProvider.of<BusinessBloc>(context);
-    blocBusiness.add(OnAddPersonEvent(name));
+    final person = await blocBusiness.onAddPersons(name);
     if (onRegister != null) {
       onRegister!();
     }
+
     Navigator.pop(context);
+
+    showModalBottomSheet(
+        context: context,
+        backgroundColor: Colors.transparent,
+        builder: (_) {
+          return BottomSheerUser(
+            person: person,
+          );
+        });
   }
 
   @override
@@ -53,8 +65,8 @@ class BottomSheetCreatePerson extends StatelessWidget {
             width: double.infinity,
             height: 56,
             child: Button(
-              onPressed: () {
-                handleSendPerson(context, namePersonController.text);
+              onPressed: () async {
+                await handleSendPerson(context, namePersonController.text);
                 namePersonController.text = "";
               },
               label: "Register",

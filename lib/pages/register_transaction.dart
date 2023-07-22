@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:local_auth/local_auth.dart' show AuthenticationOptions;
 import 'package:molopay/blocs/business/business_bloc.dart';
+import 'package:molopay/helpers/sql_helpers.dart';
 import 'package:molopay/models/transaction.dart';
+import 'package:molopay/utils/formatted_currency.dart';
+import 'package:molopay/utils/formatted_transaction.dart';
 import 'package:molopay/views/list_persons.dart';
 import 'package:molopay/widgets/avatar.dart';
 import 'package:onscreen_num_keyboard/onscreen_num_keyboard.dart';
@@ -19,6 +22,7 @@ class RegisterTransaction extends StatefulWidget {
 }
 
 class _RegisterTransactionState extends State<RegisterTransaction> {
+  List<dynamic> recentTransactionAmounts = [];
   final FocusNode _focusNode = FocusNode();
   String amount = "";
   String description = "";
@@ -26,7 +30,29 @@ class _RegisterTransactionState extends State<RegisterTransaction> {
   @override
   void initState() {
     _focusNode.requestFocus();
+    _init();
     super.initState();
+  }
+
+  Future<void> _init() async {
+    final transactions = await SQLHelper.getTransactions();
+    final amountsTransactions = formattedTransaction(transactions)
+        .sublist(0, transactions.length > 5 ? 6 : transactions.length)
+        .map((t) => {
+              'text': formattedCurrency(t.amount),
+              'amount': t.amount,
+            })
+        .toList();
+    //Los ponemos en un MAP
+    Map<String, dynamic> uniqueObjectsMap = {};
+
+    for (Map<String, dynamic> obj in amountsTransactions) {
+      uniqueObjectsMap[obj['text']] = obj;
+    }
+    final result = uniqueObjectsMap.values.toList();
+    setState(() {
+      recentTransactionAmounts = result;
+    });
   }
 
   handleChangeAmount(String text) {
@@ -255,6 +281,35 @@ class _RegisterTransactionState extends State<RegisterTransaction> {
                         hintText: 'Into a description',
                         hintStyle:
                             TextStyle(color: Colors.white.withOpacity(0.5))),
+                  ),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  SizedBox(
+                    height: 50,
+                    child: ListView.separated(
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (_, index) {
+                        final item = recentTransactionAmounts[index];
+                        return GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              amount = item['amount'].toString();
+                            });
+                          },
+                          child: Chip(
+                            label: Text(item['text']),
+                            backgroundColor: AppColors.white.withOpacity(0.2),
+                          ),
+                        );
+                      },
+                      separatorBuilder: (_, __) {
+                        return const SizedBox(
+                          width: 10,
+                        );
+                      },
+                      itemCount: recentTransactionAmounts.length,
+                    ),
                   )
                 ],
               ),
